@@ -28,7 +28,15 @@
 <li><a href="#_shebang">1.2. Shebang</a></li>
 </ul>
 </li>
-<li><a href="#_nashorn_javascript_engine">2. Nashorn JavaScript Engine</a></li>
+<li><a href="#_nashorn_javascript_engine_from_within_java">2. Nashorn JavaScript Engine from within Java</a>
+<ul class="sectlevel2">
+<li><a href="#_invoking_javascript_functions_from_java">2.1. Invoking JavaScript functions from Java</a></li>
+<li><a href="#_invoking_java_methods_from_javascript">2.2. Invoking Java methods from JavaScript</a></li>
+<li><a href="#_options">2.3. Options</a></li>
+<li><a href="#_bindings_context">2.4. Bindings / Context</a></li>
+<li><a href="#_scriptobjectmirror">2.5. ScriptObjectMirror</a></li>
+</ul>
+</li>
 <li><a href="#_api_and_language_extensions">3. API and Language Extensions</a></li>
 <li><a href="#_package_manager">4. Package Manager</a>
 <ul class="sectlevel2">
@@ -60,7 +68,7 @@
 <div class="sectionbody">
 <div class="paragraph">
 <p>Nashorn is the official JavaScript Engine in the Java Virtual Machine since Version 8.
-It supports and implements the ECMAScript 5.1 specification and competes among others directly with <a href="https://developers.google.com/v8/">Google V8</a> (the script enginge behind <a href="https://nodejs.org">Node.js</a>).
+It supports and implements the <a href="http://www.ecma-international.org/ecma-262/5.1/">ECMAScript 5.1 specification</a> and competes among others directly with <a href="https://developers.google.com/v8/">Google V8</a> (the script enginge behind <a href="https://nodejs.org">Node.js</a>).
 Nashorn compiles JavaScript to Java Bytecode during runtime and thus provides high interoperability of Java and JavaScript.</p>
 </div>
 <div class="imageblock">
@@ -74,6 +82,19 @@ After working through this tutorial you&#8217;ll be able to use Nashorn and its 
 </div>
 <div class="paragraph">
 <p><em>Another good starting point for Nashorn resources might be the <a href="http://openjdk.java.net/projects/nashorn/">Official Project Nashorn Website</a> with links to the mailing-list, the blog and the wiki pages. Check it out!</em></p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+Nashorn in JDK 8 implements, as mentioned above the ECMAScript 5.1 specification. But it&#8217;s Nashorns strategy to follow the ECMAScript spec.
+So the follow up major releases of Nashorn will implement <a href="http://www.ecma-international.org/ecma-262/6.0/">ECMAScript 2015 spec</a>.
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
@@ -211,9 +232,197 @@ Scripting mode is automatically enabled when running shebang Nashorn scripts.
 </div>
 </div>
 <div class="sect1">
-<h2 id="_nashorn_javascript_engine">2. Nashorn JavaScript Engine</h2>
+<h2 id="_nashorn_javascript_engine_from_within_java">2. Nashorn JavaScript Engine from within Java</h2>
 <div class="sectionbody">
+<div class="paragraph">
+<p>The Nashorn Engine is a JavaScript implementation of the <a href="https://www.jcp.org/en/jsr/detail?id=223">JSR-223</a> <em>(Scripting for the Java Platform)</em>. It implements the <code>javax.script</code> API.
+So, for being able to evaluate JavaScript code from Java, we just create a new Nashorn <code>javax.script.ScriptEngine</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">ScriptEngine engine = <span class="keyword">new</span> ScriptEngineManager().getEngineByName(<span class="string"><span class="delimiter">&quot;</span><span class="content">nashorn</span><span class="delimiter">&quot;</span></span>);
+engine.eval(<span class="string"><span class="delimiter">&quot;</span><span class="content">print('Hello World');</span><span class="delimiter">&quot;</span></span>);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As seen above, JavaScript code can be evaluated directly by passing it as a string to the <code>eval()</code> method of the engine object.
+Alternatively you can parse a <code>.js</code>-file by passing a <code>FileReader</code> object pointing to your file:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">ScriptEngine engine = <span class="keyword">new</span> ScriptEngineManager().getEngineByName(<span class="string"><span class="delimiter">&quot;</span><span class="content">nashorn</span><span class="delimiter">&quot;</span></span>);
+engine.eval(<span class="keyword">new</span> <span class="predefined-type">FileReader</span>(<span class="string"><span class="delimiter">'</span><span class="content">test.js</span><span class="delimiter">'</span></span>));</code></pre>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_invoking_javascript_functions_from_java">2.1. Invoking JavaScript functions from Java</h3>
+<div class="paragraph">
+<p>It&#8217;s not only possible to run single JS statements or evaluate complete JS files, but it&#8217;s also possible to invoke JavaScript functions from within Java code.
+Additionally you can pass Java objects as function arguments and return data back from the function to the calling Java method.</p>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s assume our JavaScript file:</p>
+</div>
+<div class="listingblock">
+<div class="title">example.js</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="javascript"><span class="keyword">var</span> <span class="function">sayHello</span> = <span class="keyword">function</span>(name) {
+  print(<span class="string"><span class="delimiter">'</span><span class="content">Hello, </span><span class="delimiter">'</span></span> + name + <span class="string"><span class="delimiter">'</span><span class="content">!</span><span class="delimiter">'</span></span>);
+  <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="content">hello from javascript</span><span class="delimiter">'</span></span>;
+};</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To be able to call our defined <code>sayHello</code> function, we first have to cast the <code>engine</code> object to the <code>Invocable</code> interface, which is implemented by the <code>NashornScriptEngine</code> implementation.
+The <code>Invocable</code> interface provides the <code>invokeFunktion()</code> method, which allows to call JavaScript functions for a given name and pass arguments:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">ScriptEngine engine = <span class="keyword">new</span> ScriptEngineManager().getEngineByName(<span class="string"><span class="delimiter">&quot;</span><span class="content">nashorn</span><span class="delimiter">&quot;</span></span>);
+engine.eval(<span class="keyword">new</span> <span class="predefined-type">FileReader</span>(<span class="string"><span class="delimiter">'</span><span class="content">example.js</span><span class="delimiter">'</span></span>));
 
+Invocable invocable = (Invocable) engine;
+
+<span class="predefined-type">Object</span> result = invocable.invokeFunction(<span class="string"><span class="delimiter">&quot;</span><span class="content">sayHello</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">John Doe</span><span class="delimiter">&quot;</span></span>);
+<span class="predefined-type">System</span>.out.println(result);
+<span class="predefined-type">System</span>.out.println(result.getClass());
+
+<span class="comment">// Hello, John Doe!</span>
+<span class="comment">// hello from javascript</span>
+<span class="comment">// class java.lang.String</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Our code prints three lines to the console: The JavaScript function <code>print()</code> pipes the result to <code>System.out</code>, afterwards, the two Java <code>System.out.println()</code> methods are evaluated.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_invoking_java_methods_from_javascript">2.2. Invoking Java methods from JavaScript</h3>
+<div class="paragraph">
+<p>Calling or invoking Java methods from JavaScript code is just as easy as vice-versa. Let&#8217;s assume a Java class with two methods:</p>
+</div>
+<div class="listingblock">
+<div class="title">MyJavaClass.java</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="keyword">package</span> <span class="namespace">my.package</span>;
+
+<span class="directive">public</span> <span class="type">class</span> <span class="class">MyJavaClass</span> {
+
+    <span class="directive">public</span> <span class="directive">static</span> <span class="predefined-type">String</span> sayHello(<span class="predefined-type">String</span> name) {
+        <span class="keyword">return</span> <span class="predefined-type">String</span>.format(<span class="string"><span class="delimiter">&quot;</span><span class="content">Hello %s from Java!</span><span class="delimiter">&quot;</span></span>, name);
+    }
+
+    <span class="directive">public</span> <span class="type">int</span> add(<span class="type">int</span> a, <span class="type">int</span> b) {
+        <span class="keyword">return</span> a + b;
+    }
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Our Java class can be referenced from JavaScript via the <code>Java.type</code> API extension. This is similar to the <code>import</code> statement in Java.
+After referencing our Java class, we can call the static method and print the result to <code>System.out</code>.
+Since the <code>sayHello()</code> method is static, we don&#8217;t have to create an instance as we have to do for calling the <code>add()</code> method.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="javascript"><span class="keyword">var</span> MyJavaClass = Java.type(<span class="string"><span class="delimiter">'</span><span class="content">my.package.MyJavaClass</span><span class="delimiter">'</span></span>);
+
+<span class="keyword">var</span> greetingResult = MyJavaClass.sayHello(<span class="string"><span class="delimiter">'</span><span class="content">John Doe</span><span class="delimiter">'</span></span>);
+print(greetingResult);
+
+<span class="keyword">var</span> myClass = <span class="keyword">new</span> MyJavaClass();
+<span class="keyword">var</span> calcResult = myClass.add(<span class="integer">1</span>, <span class="integer">2</span>);
+print(calcResult);
+
+<span class="comment">// Hello John Doe from Java!</span>
+<span class="comment">// 3</span></code></pre>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_nashorn_type_conversions">2.2.1. Nashorn type conversions</h4>
+<div class="paragraph">
+<p>With this little example, you can find out, how Nashorn handles type conversions between Java and JavaScript, when calling Java methods from JavaScript.</p>
+</div>
+<div class="listingblock">
+<div class="title">NashornTypes.java</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="keyword">package</span> <span class="namespace">my.package</span>;
+<span class="directive">public</span> <span class="type">class</span> <span class="class">NashornTypes</span> {
+    <span class="directive">public</span> <span class="directive">static</span> <span class="type">void</span> printType(<span class="predefined-type">Object</span> object) {
+        <span class="predefined-type">System</span>.out.println((object.getClass());
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now, call this static method with different JavaScript types:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="javascript"><span class="keyword">var</span> NashornTypes = Java.type(<span class="string"><span class="delimiter">'</span><span class="content">my.package.NashornTypes</span><span class="delimiter">'</span></span>);
+
+NashornTypes.printType(<span class="string"><span class="delimiter">&quot;</span><span class="content">Hello</span><span class="delimiter">&quot;</span></span>);
+<span class="comment">// class java.lang.String</span>
+
+NashornTypes.printType(<span class="integer">123</span>);
+<span class="comment">// class java.lang.Integer</span>
+
+NashornTypes.printType(<span class="float">12.34</span>);
+<span class="comment">// class java.lang.Double</span>
+
+NashornTypes.printType(<span class="predefined-constant">true</span>);
+<span class="comment">// class java.lang.Boolean</span>
+
+NashornTypes.printType(<span class="keyword">new</span> Number(<span class="integer">123</span>));
+<span class="comment">// class jdk.nashorn.internal.objects.NativeNumber</span>
+
+NashornTypes.printType(<span class="keyword">new</span> Date());
+<span class="comment">// class jdk.nashorn.internal.objects.NativeDate</span>
+
+NashornTypes.printType(<span class="keyword">new</span> RegExp());
+<span class="comment">// class jdk.nashorn.internal.objects.NativeRegExp</span>
+
+NashornTypes.printType({<span class="key">foo</span>: <span class="string"><span class="delimiter">'</span><span class="content">bar</span><span class="delimiter">'</span></span>});
+<span class="comment">// class jdk.nashorn.internal.scripts.J04</span></code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Primitive JavaScript types are converted to the appropriate Java wrapper class.</p>
+</li>
+<li>
+<p>Native JavaScript objects are represented by internal adapter classes.</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+Don&#8217;t rely on programming against / using internal classes in <code>jdk.nashorn.internal</code> as they are likely subject to change!
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_options">2.3. Options</h3>
+
+</div>
+<div class="sect2">
+<h3 id="_bindings_context">2.4. Bindings / Context</h3>
+
+</div>
+<div class="sect2">
+<h3 id="_scriptobjectmirror">2.5. ScriptObjectMirror</h3>
+
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -288,7 +497,7 @@ Scripting mode is automatically enabled when running shebang Nashorn scripts.
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-01-24 12:29:57 UTC
+Last updated 2016-01-24 13:50:07 UTC
 </div>
 </div>
 </body>
