@@ -23,22 +23,24 @@
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
 <li><a href="#_nashorn_at_the_command_line_interface_cli">1. Nashorn at the Command Line Interface (CLI)</a>
-<ul class="sectlevel2">
-<li><a href="#_scripting_mode">1.1. Scripting mode</a></li>
-<li><a href="#_shebang">1.2. Shebang</a></li>
+<ul class="sectlevel3">
+<li><a href="#_exiting">1.1. Exiting</a></li>
+<li><a href="#_help_options">1.2. Help / Options</a></li>
+<li><a href="#_scripting_mode">1.3. Scripting mode</a></li>
+<li><a href="#_shebang">1.4. Shebang</a></li>
 </ul>
 </li>
 <li><a href="#_nashorn_javascript_engine_from_within_java">2. Nashorn JavaScript Engine from within Java</a>
 <ul class="sectlevel2">
 <li><a href="#_invoking_javascript_functions_from_java">2.1. Invoking JavaScript functions from Java</a></li>
 <li><a href="#_invoking_java_methods_from_javascript">2.2. Invoking Java methods from JavaScript</a></li>
-<li><a href="#_options">2.3. Options</a></li>
-<li><a href="#_bindings_context">2.4. Bindings / Context</a></li>
-<li><a href="#_scriptobjectmirror">2.5. ScriptObjectMirror</a></li>
+<li><a href="#_scriptobjectmirror">2.3. ScriptObjectMirror</a></li>
+<li><a href="#_options_for_the_script_engine">2.4. Options for the script engine</a></li>
+<li><a href="#_bindings_context">2.5. Bindings / Context</a></li>
 </ul>
 </li>
 <li><a href="#_api_and_language_extensions">3. API and Language Extensions</a></li>
-<li><a href="#_package_manager">4. Package Manager</a>
+<li><a href="#_working_with_package_manager">4. Working with Package Manager</a>
 <ul class="sectlevel2">
 <li><a href="#_npm">4.1. NPM</a></li>
 <li><a href="#_maven">4.2. Maven</a></li>
@@ -110,7 +112,7 @@ So, if you want to work with <code>jjs</code> - and that&#8217;s what we want to
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="sh">$ cd /usr/bin
+<pre class="CodeRay highlight"><code data-lang="bash">$ cd /usr/bin
 $ ln -s $JAVA_HOME/bin/jjs jjs
 $ jjs
 jjs&gt; print('Hello World');</code></pre>
@@ -139,10 +141,12 @@ print(x + y);</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="sh">$ jjs test.js
+<pre class="CodeRay highlight"><code data-lang="bash">$ jjs test.js
 30</code></pre>
 </div>
 </div>
+<div class="sect3">
+<h4 id="_exiting">1.1. Exiting</h4>
 <div class="paragraph">
 <p>The <code>jjs</code> client can be exited by calling</p>
 </div>
@@ -155,15 +159,27 @@ jjs&gt; quit()
 jjs&gt; quit(<span class="integer">1</span>)</code></pre>
 </div>
 </div>
+</div>
+<div class="sect3">
+<h4 id="_help_options">1.2. Help / Options</h4>
+<div class="paragraph">
+<p>List all options of <code>jjs</code> by calling it with the <code>-help</code> option:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ jjs -help</code></pre>
+</div>
+</div>
+</div>
 <div class="sect2">
-<h3 id="_scripting_mode">1.1. Scripting mode</h3>
+<h3 id="_scripting_mode">1.3. Scripting mode</h3>
 <div class="paragraph">
 <p>In addition to the ECMAScript 5.1 specification, Nashorn implements a number of own syntax and API extensions as well <em>(see one of the next chapters)</em>.
 Many of these extensions are only available in <code>scripting</code> mode. <code>Scripting</code> mode is turned on by using the cli option <code>--scripting</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="sh">$ jjs --scripting</code></pre>
+<pre class="CodeRay highlight"><code data-lang="bash">$ jjs --scripting</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -180,7 +196,7 @@ print(<span class="string"><span class="delimiter">'</span><span class="content"
 </div>
 </div>
 <div class="sect2">
-<h3 id="_shebang">1.2. Shebang</h3>
+<h3 id="_shebang">1.4. Shebang</h3>
 <div class="paragraph">
 <p>Nashorn supports shebang scripting.
 So, instead of calling your JavaScript file like the traditional way:</p>
@@ -193,7 +209,7 @@ So, instead of calling your JavaScript file like the traditional way:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="sh">$ jjs test.js</code></pre>
+<pre class="CodeRay highlight"><code data-lang="bash">$ jjs test.js</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -211,7 +227,7 @@ print(<span class="string"><span class="delimiter">'</span><span class="content"
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="sh">$ chmod 755 test.js
+<pre class="CodeRay highlight"><code data-lang="bash">$ chmod 755 test.js
 $ ./test.js</code></pre>
 </div>
 </div>
@@ -345,13 +361,9 @@ print(calcResult);
 <p>With this little example, you can find out, how Nashorn handles type conversions between Java and JavaScript, when calling Java methods from JavaScript.</p>
 </div>
 <div class="listingblock">
-<div class="title">NashornTypes.java</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="keyword">package</span> <span class="namespace">my.package</span>;
-<span class="directive">public</span> <span class="type">class</span> <span class="class">NashornTypes</span> {
-    <span class="directive">public</span> <span class="directive">static</span> <span class="type">void</span> printType(<span class="predefined-type">Object</span> object) {
-        <span class="predefined-type">System</span>.out.println((object.getClass());
-    }
+<pre class="CodeRay highlight"><code data-lang="java"><span class="directive">public</span> <span class="directive">static</span> <span class="type">void</span> printType(<span class="predefined-type">Object</span> object) {
+    <span class="predefined-type">System</span>.out.println((object.getClass());
 }</code></pre>
 </div>
 </div>
@@ -360,31 +372,33 @@ print(calcResult);
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="javascript"><span class="keyword">var</span> NashornTypes = Java.type(<span class="string"><span class="delimiter">'</span><span class="content">my.package.NashornTypes</span><span class="delimiter">'</span></span>);
-
-NashornTypes.printType(<span class="string"><span class="delimiter">&quot;</span><span class="content">Hello</span><span class="delimiter">&quot;</span></span>);
+<pre class="CodeRay highlight"><code data-lang="javascript">MyJavaClass.printType(<span class="string"><span class="delimiter">&quot;</span><span class="content">Hello</span><span class="delimiter">&quot;</span></span>);
 <span class="comment">// class java.lang.String</span>
 
-NashornTypes.printType(<span class="integer">123</span>);
+MyJavaClass.printType(<span class="integer">123</span>);
 <span class="comment">// class java.lang.Integer</span>
 
-NashornTypes.printType(<span class="float">12.34</span>);
+MyJavaClass.printType(<span class="float">12.34</span>);
 <span class="comment">// class java.lang.Double</span>
 
-NashornTypes.printType(<span class="predefined-constant">true</span>);
+MyJavaClass.printType(<span class="predefined-constant">true</span>);
 <span class="comment">// class java.lang.Boolean</span>
 
-NashornTypes.printType(<span class="keyword">new</span> Number(<span class="integer">123</span>));
+MyJavaClass.printType(<span class="keyword">new</span> Number(<span class="integer">123</span>));
 <span class="comment">// class jdk.nashorn.internal.objects.NativeNumber</span>
+<span class="comment">// class jdk.nashorn.api.scripting.ScriptObjectMirror</span>
 
-NashornTypes.printType(<span class="keyword">new</span> Date());
+MyJavaClass.printType(<span class="keyword">new</span> Date());
 <span class="comment">// class jdk.nashorn.internal.objects.NativeDate</span>
+<span class="comment">// class jdk.nashorn.api.scripting.ScriptObjectMirror</span>
 
-NashornTypes.printType(<span class="keyword">new</span> RegExp());
+MyJavaClass.printType(<span class="keyword">new</span> RegExp());
 <span class="comment">// class jdk.nashorn.internal.objects.NativeRegExp</span>
+<span class="comment">// class jdk.nashorn.api.scripting.ScriptObjectMirror</span>
 
-NashornTypes.printType({<span class="key">foo</span>: <span class="string"><span class="delimiter">'</span><span class="content">bar</span><span class="delimiter">'</span></span>});
-<span class="comment">// class jdk.nashorn.internal.scripts.J04</span></code></pre>
+MyJavaClass.printType({<span class="key">foo</span>: <span class="string"><span class="delimiter">'</span><span class="content">bar</span><span class="delimiter">'</span></span>});
+<span class="comment">// class jdk.nashorn.internal.scripts.J04</span>
+<span class="comment">// class jdk.nashorn.api.scripting.ScriptObjectMirror</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -393,7 +407,7 @@ NashornTypes.printType({<span class="key">foo</span>: <span class="string"><span
 <p>Primitive JavaScript types are converted to the appropriate Java wrapper class.</p>
 </li>
 <li>
-<p>Native JavaScript objects are represented by internal adapter classes.</p>
+<p>Native JavaScript objects are represented by internal adapter classes, respectively to <code>ScriptObjectMirror</code>.</p>
 </li>
 </ul>
 </div>
@@ -412,15 +426,121 @@ Don&#8217;t rely on programming against / using internal classes in <code>jdk.na
 </div>
 </div>
 <div class="sect2">
-<h3 id="_options">2.3. Options</h3>
+<h3 id="_scriptobjectmirror">2.3. ScriptObjectMirror</h3>
+<div class="paragraph">
+<p>The <code>ScriptObjectMirror</code> is part of the <code>jdk.nashorn.api</code> and is intended to be used in client-code instead of the internal classes.
+This mirror object is a representation of the underlying JavaScript object and provides access to it and its methods and properties.
+The <code>ScriptObjectMirror</code> implements the <code>Map</code> interface.</p>
+</div>
+<div class="paragraph">
+<p>We edit our last method slightly to</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="directive">public</span> <span class="directive">static</span> <span class="type">void</span> printObjectMirror(ScriptObjectMirror mirror) {
+    <span class="predefined-type">System</span>.out.println(mirror.getClassName() + <span class="string"><span class="delimiter">&quot;</span><span class="content">: </span><span class="delimiter">&quot;</span></span> + <span class="predefined-type">Arrays</span>.toString(mirror.getOwnKeys(<span class="predefined-constant">true</span>)));
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When we call this method now with our last four JS function calls (number, date, regexp and object literal):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="javascript">MyJavaClass.printType(<span class="keyword">new</span> Number(<span class="integer">123</span>));
+MyJavaClass.printType(<span class="keyword">new</span> Date());
+MyJavaClass.printType(<span class="keyword">new</span> RegExp());
+MyJavaClass.printType({
+    <span class="key">foo</span>: <span class="string"><span class="delimiter">'</span><span class="content">bar</span><span class="delimiter">'</span></span>,
+    <span class="key">bar</span>: <span class="string"><span class="delimiter">'</span><span class="content">foo</span><span class="delimiter">'</span></span>
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>we now get this result:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code>Number: []
+Date: []
+RegExp: [lastIndex, source, global, ignoreCase, multiline]
+Object: [foo, bar]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Also, we can call member functions on JavaScript objects from Java.<br>
+Let&#8217;s assume a JavaScript type <code>Person</code> with some properties and a function <code>getFullName()</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="javascript"><span class="keyword">function</span> <span class="function">Person</span>(firstName, lastName) {
+  <span class="local-variable">this</span>.firstName = firstName;
+  <span class="local-variable">this</span>.lastName = lastName;
+  <span class="local-variable">this</span>.<span class="function">getFullName</span> = <span class="keyword">function</span>() {
+    <span class="keyword">return</span> <span class="local-variable">this</span>.firstName + <span class="string"><span class="delimiter">&quot;</span><span class="content"> </span><span class="delimiter">&quot;</span></span> + <span class="local-variable">this</span>.lastName;
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The function <code>getFullName()</code> can be called on <code>ScriptObjectMirror</code> via <code>callMember()</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="directive">public</span> <span class="directive">static</span> <span class="type">void</span> getFullName(ScriptObjectMirror person) {
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Full name is: </span><span class="delimiter">&quot;</span></span> + person.callMember(<span class="string"><span class="delimiter">&quot;</span><span class="content">getFullName</span><span class="delimiter">&quot;</span></span>));
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now, our JavaScript code looks like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="javascript"><span class="keyword">var</span> person = <span class="keyword">new</span> Person(<span class="string"><span class="delimiter">'</span><span class="content">John</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">Doe</span><span class="delimiter">'</span></span>);
+MyJavaClass.getFullName(person);
 
+<span class="comment">// Full name is: John Doe</span></code></pre>
+</div>
+</div>
 </div>
 <div class="sect2">
-<h3 id="_bindings_context">2.4. Bindings / Context</h3>
-
+<h3 id="_options_for_the_script_engine">2.4. Options for the script engine</h3>
+<div class="paragraph">
+<p>Nashorn script engine customization can be done by using <code>nashorn.args</code> system properties.
+Just specify the options you want with <code><strong>-Dnashorn.args=&#8230;&#8203;</strong></code>
+E.g. enabling the scripting mode:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ java -Dnashorn.args=-scripting MyJavaClass</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can also create a Nashorn engine by passing customization options programmatically.
+In this case, you&#8217;ll have to instantiate <code>NashornScriptEngineFactory</code> directly:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">NashornScriptEngineFactory factory = <span class="keyword">new</span> NashornScriptEngineFactory();
+ScriptEngine engine = factory.getScriptEngine(<span class="keyword">new</span> <span class="predefined-type">String</span><span class="type">[]</span> { <span class="string"><span class="delimiter">&quot;</span><span class="content">-scripting</span><span class="delimiter">&quot;</span></span> });</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Available options can be determined from the <a href="#_nashorn_at_the_command_line_interface_cli">command line</a> when calling <code>jjs -help</code>.
+</td>
+</tr>
+</table>
+</div>
 </div>
 <div class="sect2">
-<h3 id="_scriptobjectmirror">2.5. ScriptObjectMirror</h3>
+<h3 id="_bindings_context">2.5. Bindings / Context</h3>
 
 </div>
 </div>
@@ -432,12 +552,28 @@ Don&#8217;t rely on programming against / using internal classes in <code>jdk.na
 </div>
 </div>
 <div class="sect1">
-<h2 id="_package_manager">4. Package Manager</h2>
+<h2 id="_working_with_package_manager">4. Working with Package Manager</h2>
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_npm">4.1. NPM</h3>
 <div class="sect3">
-<h4 id="_jvm_npm">4.1.1. JVM-NPM</h4>
+<h4 id="_polyfill_js">4.1.1. Polyfill.js</h4>
+<div class="listingblock">
+<div class="title">nashorn-polyfill.js</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="javascript"><span class="keyword">var</span> global = <span class="local-variable">this</span>;
+<span class="keyword">var</span> window = <span class="local-variable">this</span>;
+<span class="keyword">var</span> process = {<span class="key">env</span>:{}};
+
+<span class="keyword">var</span> console = {};
+console.debug = print;
+console.warn = print;
+console.log = print;</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_jvm_npm">4.1.2. JVM-NPM</h4>
 
 </div>
 </div>
@@ -497,7 +633,7 @@ Don&#8217;t rely on programming against / using internal classes in <code>jdk.na
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-01-24 13:50:07 UTC
+Last updated 2016-01-24 16:07:16 UTC
 </div>
 </div>
 </body>
