@@ -10,6 +10,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <link rel="stylesheet" href="css//asciidoctor.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="css//coderay-asciidoctor.css">
 </head>
 <body class="book toc2 toc-left">
 <div id="header">
@@ -109,7 +110,7 @@ So, if you want to work with <code>jjs</code> - and that&#8217;s what we want to
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash">$ cd /usr/bin
+<pre class="CodeRay highlight"><code data-lang="bash">$ cd /usr/bin
 $ ln -s $JAVA_HOME/bin/jjs jjs
 $ jjs
 jjs&gt; print('Hello World');</code></pre>
@@ -120,9 +121,9 @@ jjs&gt; print('Hello World');</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-js" data-lang="js">jjs&gt; var x = 10;
+<pre class="CodeRay highlight"><code data-lang="js">jjs&gt; <span class="keyword">var</span> x = <span class="integer">10</span>;
 jjs&gt; print(x);
-10</code></pre>
+<span class="integer">10</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -131,14 +132,14 @@ jjs&gt; print(x);
 <div class="listingblock">
 <div class="title">test.js</div>
 <div class="content">
-<pre class="highlight"><code class="language-js" data-lang="js">var x = 10;
-var y = 20;
+<pre class="CodeRay highlight"><code data-lang="js"><span class="keyword">var</span> x = <span class="integer">10</span>;
+<span class="keyword">var</span> y = <span class="integer">20</span>;
 print(x + y);</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash">$ jjs test.js
+<pre class="CodeRay highlight"><code data-lang="bash">$ jjs test.js
 30</code></pre>
 </div>
 </div>
@@ -150,11 +151,11 @@ print(x + y);</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-js" data-lang="js">jjs&gt; exit()
-jjs&gt; exit(1)
+<pre class="CodeRay highlight"><code data-lang="js">jjs&gt; exit()
+jjs&gt; exit(<span class="integer">1</span>)
 
 jjs&gt; quit()
-jjs&gt; quit(1)</code></pre>
+jjs&gt; quit(<span class="integer">1</span>)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -165,7 +166,7 @@ jjs&gt; quit(1)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash">$ jjs -help</code></pre>
+<pre class="CodeRay highlight"><code data-lang="bash">$ jjs -help</code></pre>
 </div>
 </div>
 <div class="sect2">
@@ -176,7 +177,7 @@ Many of these extensions are only available in <code>scripting</code> mode. <cod
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash">$ jjs --scripting</code></pre>
+<pre class="CodeRay highlight"><code data-lang="bash">$ jjs --scripting</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -185,10 +186,10 @@ Many of these extensions are only available in <code>scripting</code> mode. <cod
 <div class="listingblock">
 <div class="title">test.js</div>
 <div class="content">
-<pre class="highlight"><code class="language-js" data-lang="js"># style line comment -scripting mode
-# prints hello
+<pre class="CodeRay highlight"><code data-lang="js"><span class="error">#</span> style line comment -scripting mode
+<span class="error">#</span> prints hello
 
-print('hello');</code></pre>
+print(<span class="string"><span class="delimiter">'</span><span class="content">hello</span><span class="delimiter">'</span></span>);</code></pre>
 </div>
 </div>
 </div>
@@ -201,12 +202,12 @@ So, instead of calling your JavaScript file like the traditional way:</p>
 <div class="listingblock">
 <div class="title">test.js</div>
 <div class="content">
-<pre class="highlight"><code class="language-js" data-lang="js">print('hello');</code></pre>
+<pre class="CodeRay highlight"><code data-lang="js">print(<span class="string"><span class="delimiter">'</span><span class="content">hello</span><span class="delimiter">'</span></span>);</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash">$ jjs test.js</code></pre>
+<pre class="CodeRay highlight"><code data-lang="bash">$ jjs test.js</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -215,8 +216,8 @@ So, instead of calling your JavaScript file like the traditional way:</p>
 <div class="listingblock">
 <div class="title">test.js</div>
 <div class="content">
-<pre class="highlight"><code class="language-js" data-lang="js">#!/usr/bin/jjs
-print('hello');</code></pre>
+<pre class="CodeRay highlight"><code data-lang="js"><span class="error">#</span>!<span class="regexp"><span class="delimiter">/</span><span class="content">usr</span><span class="delimiter">/</span></span>bin/jjs
+print(<span class="string"><span class="delimiter">'</span><span class="content">hello</span><span class="delimiter">'</span></span>);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -224,7 +225,7 @@ print('hello');</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash">$ chmod 755 test.js
+<pre class="CodeRay highlight"><code data-lang="bash">$ chmod 755 test.js
 $ ./test.js</code></pre>
 </div>
 </div>
@@ -253,8 +254,8 @@ So, for being able to evaluate JavaScript code from Java, we just create a new N
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">ScriptEngine engine = new ScriptEngineManager().getEngineByName("nashorn");
-engine.eval("print('Hello World');");</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">ScriptEngine engine = <span class="keyword">new</span> ScriptEngineManager().getEngineByName(<span class="string"><span class="delimiter">&quot;</span><span class="content">nashorn</span><span class="delimiter">&quot;</span></span>);
+engine.eval(<span class="string"><span class="delimiter">&quot;</span><span class="content">print('Hello World');</span><span class="delimiter">&quot;</span></span>);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -263,8 +264,8 @@ Alternatively you can parse a <code>.js</code>-file by passing a <code>FileReade
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">ScriptEngine engine = new ScriptEngineManager().getEngineByName("nashorn");
-engine.eval(new FileReader('test.js'));</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">ScriptEngine engine = <span class="keyword">new</span> ScriptEngineManager().getEngineByName(<span class="string"><span class="delimiter">&quot;</span><span class="content">nashorn</span><span class="delimiter">&quot;</span></span>);
+engine.eval(<span class="keyword">new</span> <span class="predefined-type">FileReader</span>(<span class="string"><span class="delimiter">'</span><span class="content">test.js</span><span class="delimiter">'</span></span>));</code></pre>
 </div>
 </div>
 <div class="sect2">
@@ -279,9 +280,9 @@ Additionally you can pass Java objects as function arguments and return data bac
 <div class="listingblock">
 <div class="title">example.js</div>
 <div class="content">
-<pre class="highlight"><code class="language-javascript" data-lang="javascript">var sayHello = function(name) {
-  print('Hello, ' + name + '!');
-  return 'hello from javascript';
+<pre class="CodeRay highlight"><code data-lang="javascript"><span class="keyword">var</span> <span class="function">sayHello</span> = <span class="keyword">function</span>(name) {
+  print(<span class="string"><span class="delimiter">'</span><span class="content">Hello, </span><span class="delimiter">'</span></span> + name + <span class="string"><span class="delimiter">'</span><span class="content">!</span><span class="delimiter">'</span></span>);
+  <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="content">hello from javascript</span><span class="delimiter">'</span></span>;
 };</code></pre>
 </div>
 </div>
@@ -291,18 +292,18 @@ The <code>Invocable</code> interface provides the <code>invokeFunktion()</code> 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">ScriptEngine engine = new ScriptEngineManager().getEngineByName("nashorn");
-engine.eval(new FileReader('example.js'));
+<pre class="CodeRay highlight"><code data-lang="java">ScriptEngine engine = <span class="keyword">new</span> ScriptEngineManager().getEngineByName(<span class="string"><span class="delimiter">&quot;</span><span class="content">nashorn</span><span class="delimiter">&quot;</span></span>);
+engine.eval(<span class="keyword">new</span> <span class="predefined-type">FileReader</span>(<span class="string"><span class="delimiter">'</span><span class="content">example.js</span><span class="delimiter">'</span></span>));
 
 Invocable invocable = (Invocable) engine;
 
-Object result = invocable.invokeFunction("sayHello", "John Doe");
-System.out.println(result);
-System.out.println(result.getClass());
+<span class="predefined-type">Object</span> result = invocable.invokeFunction(<span class="string"><span class="delimiter">&quot;</span><span class="content">sayHello</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">John Doe</span><span class="delimiter">&quot;</span></span>);
+<span class="predefined-type">System</span>.out.println(result);
+<span class="predefined-type">System</span>.out.println(result.getClass());
 
-// Hello, John Doe!
-// hello from javascript
-// class java.lang.String</code></pre>
+<span class="comment">// Hello, John Doe!</span>
+<span class="comment">// hello from javascript</span>
+<span class="comment">// class java.lang.String</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -317,16 +318,16 @@ System.out.println(result.getClass());
 <div class="listingblock">
 <div class="title">MyJavaClass.java</div>
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">package my.package;
+<pre class="CodeRay highlight"><code data-lang="java"><span class="keyword">package</span> <span class="namespace">my.package</span>;
 
-public class MyJavaClass {
+<span class="directive">public</span> <span class="type">class</span> <span class="class">MyJavaClass</span> {
 
-    public static String sayHello(String name) {
-        return String.format("Hello %s from Java!", name);
+    <span class="directive">public</span> <span class="directive">static</span> <span class="predefined-type">String</span> sayHello(<span class="predefined-type">String</span> name) {
+        <span class="keyword">return</span> <span class="predefined-type">String</span>.format(<span class="string"><span class="delimiter">&quot;</span><span class="content">Hello %s from Java!</span><span class="delimiter">&quot;</span></span>, name);
     }
 
-    public int add(int a, int b) {
-        return a + b;
+    <span class="directive">public</span> <span class="type">int</span> add(<span class="type">int</span> a, <span class="type">int</span> b) {
+        <span class="keyword">return</span> a + b;
     }
 
 }</code></pre>
@@ -339,17 +340,17 @@ Since the <code>sayHello()</code> method is static, we don&#8217;t have to creat
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-javascript" data-lang="javascript">var MyJavaClass = Java.type('my.package.MyJavaClass');
+<pre class="CodeRay highlight"><code data-lang="javascript"><span class="keyword">var</span> MyJavaClass = Java.type(<span class="string"><span class="delimiter">'</span><span class="content">my.package.MyJavaClass</span><span class="delimiter">'</span></span>);
 
-var greetingResult = MyJavaClass.sayHello('John Doe');
+<span class="keyword">var</span> greetingResult = MyJavaClass.sayHello(<span class="string"><span class="delimiter">'</span><span class="content">John Doe</span><span class="delimiter">'</span></span>);
 print(greetingResult);
 
-var myClass = new MyJavaClass();
-var calcResult = myClass.add(1, 2);
+<span class="keyword">var</span> myClass = <span class="keyword">new</span> MyJavaClass();
+<span class="keyword">var</span> calcResult = myClass.add(<span class="integer">1</span>, <span class="integer">2</span>);
 print(calcResult);
 
-// Hello John Doe from Java!
-// 3</code></pre>
+<span class="comment">// Hello John Doe from Java!</span>
+<span class="comment">// 3</span></code></pre>
 </div>
 </div>
 <div class="sect3">
@@ -359,8 +360,8 @@ print(calcResult);
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">public static void printType(Object object) {
-    System.out.println((object.getClass());
+<pre class="CodeRay highlight"><code data-lang="java"><span class="directive">public</span> <span class="directive">static</span> <span class="type">void</span> printType(<span class="predefined-type">Object</span> object) {
+    <span class="predefined-type">System</span>.out.println((object.getClass());
 }</code></pre>
 </div>
 </div>
@@ -369,33 +370,33 @@ print(calcResult);
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-javascript" data-lang="javascript">MyJavaClass.printType("Hello");
-// class java.lang.String
+<pre class="CodeRay highlight"><code data-lang="javascript">MyJavaClass.printType(<span class="string"><span class="delimiter">&quot;</span><span class="content">Hello</span><span class="delimiter">&quot;</span></span>);
+<span class="comment">// class java.lang.String</span>
 
-MyJavaClass.printType(123);
-// class java.lang.Integer
+MyJavaClass.printType(<span class="integer">123</span>);
+<span class="comment">// class java.lang.Integer</span>
 
-MyJavaClass.printType(12.34);
-// class java.lang.Double
+MyJavaClass.printType(<span class="float">12.34</span>);
+<span class="comment">// class java.lang.Double</span>
 
-MyJavaClass.printType(true);
-// class java.lang.Boolean
+MyJavaClass.printType(<span class="predefined-constant">true</span>);
+<span class="comment">// class java.lang.Boolean</span>
 
-MyJavaClass.printType(new Number(123));
-// class jdk.nashorn.internal.objects.NativeNumber
-// class jdk.nashorn.api.scripting.ScriptObjectMirror
+MyJavaClass.printType(<span class="keyword">new</span> Number(<span class="integer">123</span>));
+<span class="comment">// class jdk.nashorn.internal.objects.NativeNumber</span>
+<span class="comment">// class jdk.nashorn.api.scripting.ScriptObjectMirror</span>
 
-MyJavaClass.printType(new Date());
-// class jdk.nashorn.internal.objects.NativeDate
-// class jdk.nashorn.api.scripting.ScriptObjectMirror
+MyJavaClass.printType(<span class="keyword">new</span> Date());
+<span class="comment">// class jdk.nashorn.internal.objects.NativeDate</span>
+<span class="comment">// class jdk.nashorn.api.scripting.ScriptObjectMirror</span>
 
-MyJavaClass.printType(new RegExp());
-// class jdk.nashorn.internal.objects.NativeRegExp
-// class jdk.nashorn.api.scripting.ScriptObjectMirror
+MyJavaClass.printType(<span class="keyword">new</span> RegExp());
+<span class="comment">// class jdk.nashorn.internal.objects.NativeRegExp</span>
+<span class="comment">// class jdk.nashorn.api.scripting.ScriptObjectMirror</span>
 
-MyJavaClass.printType({foo: 'bar'});
-// class jdk.nashorn.internal.scripts.J04
-// class jdk.nashorn.api.scripting.ScriptObjectMirror</code></pre>
+MyJavaClass.printType({<span class="key">foo</span>: <span class="string"><span class="delimiter">'</span><span class="content">bar</span><span class="delimiter">'</span></span>});
+<span class="comment">// class jdk.nashorn.internal.scripts.J04</span>
+<span class="comment">// class jdk.nashorn.api.scripting.ScriptObjectMirror</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -434,8 +435,8 @@ The <code>ScriptObjectMirror</code> implements the <code>Map</code> interface.</
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">public static void printObjectMirror(ScriptObjectMirror mirror) {
-    System.out.println(mirror.getClassName() + ": " + Arrays.toString(mirror.getOwnKeys(true)));
+<pre class="CodeRay highlight"><code data-lang="java"><span class="directive">public</span> <span class="directive">static</span> <span class="type">void</span> printObjectMirror(ScriptObjectMirror mirror) {
+    <span class="predefined-type">System</span>.out.println(mirror.getClassName() + <span class="string"><span class="delimiter">&quot;</span><span class="content">: </span><span class="delimiter">&quot;</span></span> + <span class="predefined-type">Arrays</span>.toString(mirror.getOwnKeys(<span class="predefined-constant">true</span>)));
 }</code></pre>
 </div>
 </div>
@@ -444,12 +445,12 @@ The <code>ScriptObjectMirror</code> implements the <code>Map</code> interface.</
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-javascript" data-lang="javascript">MyJavaClass.printType(new Number(123));
-MyJavaClass.printType(new Date());
-MyJavaClass.printType(new RegExp());
+<pre class="CodeRay highlight"><code data-lang="javascript">MyJavaClass.printType(<span class="keyword">new</span> Number(<span class="integer">123</span>));
+MyJavaClass.printType(<span class="keyword">new</span> Date());
+MyJavaClass.printType(<span class="keyword">new</span> RegExp());
 MyJavaClass.printType({
-    foo: 'bar',
-    bar: 'foo'
+    <span class="key">foo</span>: <span class="string"><span class="delimiter">'</span><span class="content">bar</span><span class="delimiter">'</span></span>,
+    <span class="key">bar</span>: <span class="string"><span class="delimiter">'</span><span class="content">foo</span><span class="delimiter">'</span></span>
 });</code></pre>
 </div>
 </div>
@@ -458,7 +459,7 @@ MyJavaClass.printType({
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>Number: []
+<pre class="CodeRay highlight"><code>Number: []
 Date: []
 RegExp: [lastIndex, source, global, ignoreCase, multiline]
 Object: [foo, bar]</code></pre>
@@ -470,11 +471,11 @@ Let&#8217;s assume a JavaScript type <code>Person</code> with some properties an
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-javascript" data-lang="javascript">function Person(firstName, lastName) {
-  this.firstName = firstName;
-  this.lastName = lastName;
-  this.getFullName = function() {
-    return this.firstName + " " + this.lastName;
+<pre class="CodeRay highlight"><code data-lang="javascript"><span class="keyword">function</span> <span class="function">Person</span>(firstName, lastName) {
+  <span class="local-variable">this</span>.firstName = firstName;
+  <span class="local-variable">this</span>.lastName = lastName;
+  <span class="local-variable">this</span>.<span class="function">getFullName</span> = <span class="keyword">function</span>() {
+    <span class="keyword">return</span> <span class="local-variable">this</span>.firstName + <span class="string"><span class="delimiter">&quot;</span><span class="content"> </span><span class="delimiter">&quot;</span></span> + <span class="local-variable">this</span>.lastName;
   }
 }</code></pre>
 </div>
@@ -484,8 +485,8 @@ Let&#8217;s assume a JavaScript type <code>Person</code> with some properties an
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">public static void getFullName(ScriptObjectMirror person) {
-    System.out.println("Full name is: " + person.callMember("getFullName"));
+<pre class="CodeRay highlight"><code data-lang="java"><span class="directive">public</span> <span class="directive">static</span> <span class="type">void</span> getFullName(ScriptObjectMirror person) {
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Full name is: </span><span class="delimiter">&quot;</span></span> + person.callMember(<span class="string"><span class="delimiter">&quot;</span><span class="content">getFullName</span><span class="delimiter">&quot;</span></span>));
 }</code></pre>
 </div>
 </div>
@@ -494,10 +495,10 @@ Let&#8217;s assume a JavaScript type <code>Person</code> with some properties an
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-javascript" data-lang="javascript">var person = new Person('John', 'Doe');
+<pre class="CodeRay highlight"><code data-lang="javascript"><span class="keyword">var</span> person = <span class="keyword">new</span> Person(<span class="string"><span class="delimiter">'</span><span class="content">John</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">Doe</span><span class="delimiter">'</span></span>);
 MyJavaClass.getFullName(person);
 
-// Full name is: John Doe</code></pre>
+<span class="comment">// Full name is: John Doe</span></code></pre>
 </div>
 </div>
 </div>
@@ -510,7 +511,7 @@ E.g. enabling the scripting mode:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash">$ java -Dnashorn.args=-scripting MyJavaClass</code></pre>
+<pre class="CodeRay highlight"><code data-lang="bash">$ java -Dnashorn.args=-scripting MyJavaClass</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -519,8 +520,8 @@ In this case, you&#8217;ll have to instantiate <code>NashornScriptEngineFactory<
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">NashornScriptEngineFactory factory = new NashornScriptEngineFactory();
-ScriptEngine engine = factory.getScriptEngine(new String[] { "-scripting" });</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">NashornScriptEngineFactory factory = <span class="keyword">new</span> NashornScriptEngineFactory();
+ScriptEngine engine = factory.getScriptEngine(<span class="keyword">new</span> <span class="predefined-type">String</span><span class="type">[]</span> { <span class="string"><span class="delimiter">&quot;</span><span class="content">-scripting</span><span class="delimiter">&quot;</span></span> });</code></pre>
 </div>
 </div>
 <div class="admonitionblock note">
@@ -538,7 +539,74 @@ Available options can be determined from the <a href="#_nashorn_at_the_command_l
 </div>
 <div class="sect2">
 <h3 id="_bindings_context">2.5. Bindings / Context</h3>
+<div class="paragraph">
+<p>A <code>ScriptContext</code> contains one or more bindings, each associated to a scope. By default, there are two scopes:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>ENGINE_SCOPE</code></p>
+</li>
+<li>
+<p><code>GLOBAL_SCOPE</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>When a Nashorn engine is created, it creates a default context:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">ScriptContext defaultContext = engine.getContext();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The default context&#8217;s <code>ENGINE_SCOPE</code> is the scope where ECMAScript "global" objects and functions (<code>Object</code>, <code>Function</code>, <code>Math</code>, <code>RegExp</code>, <code>parseInt</code>, etc.) are stored.
+The <code>GLOBAL_SCOPE</code> is shared between all engines created by the same <code>ScriptEngineManager</code>.</p>
+</div>
+<div class="paragraph">
+<p>You can store variables in the context (use of the scope is optional, default is <code>ENGINE_SCOPE</code>):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="javascript">ScriptContext context = engine.getContext();
+<span class="comment">// stores an object under the key `myKey` in the (engine scoped) context</span>
+context.setAttribute(<span class="string"><span class="delimiter">&quot;</span><span class="content">myKey</span><span class="delimiter">&quot;</span></span>, object, ScriptContext.ENGINE_SCOPE);
+<span class="comment">// retrieves the object with key `myKey` from (engine scoped) context</span>
+context.getAttribute(<span class="string"><span class="delimiter">&quot;</span><span class="content">myKey</span><span class="delimiter">&quot;</span></span>, ScriptContext.ENGINE_SCOPE);
 
+Bindings b = context.getBindings(ScriptContext.ENGINE_SCOPE);
+b.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">Object</span><span class="delimiter">&quot;</span></span>);    <span class="comment">// gets ECMAScript &quot;Object&quot; constructor</span>
+b.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">undefined</span><span class="delimiter">&quot;</span></span>); <span class="comment">// ECMAScript 'undefined' value</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If a variable is not found in <code>ENGINE_SCOPE</code>, <code>GLOBAL_SCOPE</code> bindings are being searched.</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+There&#8217;s a confusion due to ECMAScript "global" properties being in <code>ENGINE_SCOPE</code> (toplevel <em>"this"</em> in script) and not in <code>GLOBAL_SCOPE</code>.
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+More on ScriptContexts and Bindings: <a href="https://wiki.openjdk.java.net/display/Nashorn/Nashorn+jsr223+engine+notes" class="bare">https://wiki.openjdk.java.net/display/Nashorn/Nashorn+jsr223+engine+notes</a>
+</td>
+</tr>
+</table>
+</div>
 </div>
 </div>
 </div>
@@ -558,11 +626,11 @@ Available options can be determined from the <a href="#_nashorn_at_the_command_l
 <div class="listingblock">
 <div class="title">nashorn-polyfill.js</div>
 <div class="content">
-<pre class="highlight"><code class="language-javascript" data-lang="javascript">var global = this;
-var window = this;
-var process = {env:{}};
+<pre class="CodeRay highlight"><code data-lang="javascript"><span class="keyword">var</span> global = <span class="local-variable">this</span>;
+<span class="keyword">var</span> window = <span class="local-variable">this</span>;
+<span class="keyword">var</span> process = {<span class="key">env</span>:{}};
 
-var console = {};
+<span class="keyword">var</span> console = {};
 console.debug = print;
 console.warn = print;
 console.log = print;</code></pre>
@@ -630,7 +698,7 @@ console.log = print;</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-01-24 16:21:22 UTC
+Last updated 2016-01-26 18:13:13 UTC
 </div>
 </div>
 </body>
