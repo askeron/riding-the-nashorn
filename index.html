@@ -40,20 +40,24 @@
 <li><a href="#_api_and_language_extensions">3. API and Language Extensions</a>
 <ul class="sectlevel2">
 <li><a href="#_print_function">3.1. Print Function</a></li>
-<li><a href="#_java_beans">3.2. Java Beans</a></li>
-<li><a href="#_function_literals">3.3. Function Literals</a></li>
-<li><a href="#_binding_properties">3.4. Binding Properties</a></li>
-<li><a href="#_trimming_strings">3.5. Trimming Strings</a></li>
-<li><a href="#_whereis">3.6. Whereis</a></li>
-<li><a href="#_import_scopes">3.7. Import Scopes</a></li>
-<li><a href="#_packages">3.8. Packages</a></li>
-<li><a href="#_typed_arrays">3.9. Typed Arrays</a></li>
-<li><a href="#_collections_and_for_each">3.10. Collections and For-Each</a></li>
-<li><a href="#_convert_arrays">3.11. Convert Arrays</a></li>
-<li><a href="#_lambdas_and_streams">3.12. Lambdas and Streams</a></li>
-<li><a href="#_extending_classes">3.13. Extending Classes</a></li>
-<li><a href="#_calling_super">3.14. Calling Super</a></li>
-<li><a href="#_loading_scripts">3.15. Loading Scripts</a></li>
+<li><a href="#_string_interpolation">3.2. String Interpolation</a></li>
+<li><a href="#_back_quote_exec_expressions">3.3. Back-quote exec expressions</a></li>
+<li><a href="#_java_beans">3.4. Java Beans</a></li>
+<li><a href="#_function_literals">3.5. Function Literals</a></li>
+<li><a href="#_binding_properties">3.6. Binding Properties</a></li>
+<li><a href="#_trimming_strings">3.7. Trimming Strings</a></li>
+<li><a href="#_whereis">3.8. Whereis</a></li>
+<li><a href="#_import_scopes">3.9. Import Scopes</a></li>
+<li><a href="#_packages">3.10. Packages</a></li>
+<li><a href="#_typed_arrays">3.11. Typed Arrays</a></li>
+<li><a href="#_collections_and_for_each">3.12. Collections and For-Each</a></li>
+<li><a href="#_convert_arrays">3.13. Convert Arrays</a></li>
+<li><a href="#_lambdas_and_streams">3.14. Lambdas and Streams</a></li>
+<li><a href="#_extending_classes">3.15. Extending Classes</a></li>
+<li><a href="#_calling_super">3.16. Calling Super</a></li>
+<li><a href="#_loading_scripts">3.17. Loading Scripts</a></li>
+<li><a href="#_error_object">3.18. Error Object</a></li>
+<li><a href="#_scripting_mode_extension_objects">3.19. Scripting Mode Extension Objects</a></li>
 </ul>
 </li>
 <li><a href="#_working_with_package_manager">4. Working with Package Manager</a>
@@ -649,7 +653,39 @@ Let&#8217;s have a look at some of the IMHO most useful and interessting ones.</
 </div>
 </div>
 <div class="sect2">
-<h3 id="_java_beans">3.2. Java Beans</h3>
+<h3 id="_string_interpolation">3.2. String Interpolation</h3>
+<div class="paragraph">
+<p>You can specify expressions inside string literals with the <code>${expression}</code> syntax.
+The string value is computed by substituting the name of the <code>${expr}</code> expression with the value of the corresponding variable.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="javascript"><span class="keyword">var</span> name = <span class="string"><span class="delimiter">&quot;</span><span class="content">World</span><span class="delimiter">&quot;</span></span>;
+<span class="keyword">var</span> str = <span class="string"><span class="delimiter">&quot;</span><span class="content">Hello, %{name}!</span><span class="delimiter">&quot;</span></span>;
+print(str);
+<span class="comment">// Hello, World!</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_back_quote_exec_expressions">3.3. Back-quote exec expressions</h3>
+<div class="paragraph">
+<p>Nashorn supports Unix shell like back quote strings.
+Back quoted strings are evaluated by executing the programs mentioned in the string and returning value produced by the 'exec'-ed program.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="javascript"><span class="keyword">var</span> files = <span class="error">`</span>ls -l<span class="error">`</span>;  <span class="comment">// get file listing as a string</span>
+<span class="keyword">var</span> lines = files.split(<span class="string"><span class="delimiter">&quot;</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>);
+<span class="keyword">for</span> (<span class="keyword">var</span> l <span class="keyword">in</span> lines) {
+    <span class="keyword">var</span> line = lines[l];
+    print(line);
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_java_beans">3.4. Java Beans</h3>
 <div class="paragraph">
 <p>With Nashorn, you get direct access to the properties of a Java bean, no need to use getters and setters anymore:</p>
 </div>
@@ -663,7 +699,7 @@ print(date.year);  <span class="comment">// 2015</span></code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_function_literals">3.3. Function Literals</h3>
+<h3 id="_function_literals">3.5. Function Literals</h3>
 <div class="paragraph">
 <p>For simple, one-line functions, we don&#8217;t necessarily have to use curly braces (and can also ommit the <code>return</code> keyword):</p>
 </div>
@@ -675,7 +711,7 @@ print(add(<span class="integer">1</span>, <span class="integer">2</span>);  <spa
 </div>
 </div>
 <div class="sect2">
-<h3 id="_binding_properties">3.4. Binding Properties</h3>
+<h3 id="_binding_properties">3.6. Binding Properties</h3>
 <div class="paragraph">
 <p>You can bind properties from one object to another object:</p>
 </div>
@@ -693,7 +729,7 @@ print(o2.foo);    <span class="comment">// John</span></code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_trimming_strings">3.5. Trimming Strings</h3>
+<h3 id="_trimming_strings">3.7. Trimming Strings</h3>
 <div class="paragraph">
 <p>Additionally to <code>.trim()</code>, you can just trim your string object on the left or the right:</p>
 </div>
@@ -705,7 +741,7 @@ print(<span class="string"><span class="delimiter">&quot;</span><span class="con
 </div>
 </div>
 <div class="sect2">
-<h3 id="_whereis">3.6. Whereis</h3>
+<h3 id="_whereis">3.8. Whereis</h3>
 <div class="paragraph">
 <p>In case you get lost while programming:</p>
 </div>
@@ -716,7 +752,7 @@ print(<span class="string"><span class="delimiter">&quot;</span><span class="con
 </div>
 </div>
 <div class="sect2">
-<h3 id="_import_scopes">3.7. Import Scopes</h3>
+<h3 id="_import_scopes">3.9. Import Scopes</h3>
 <div class="paragraph">
 <p>Sometimes it&#8217;s useful to import many java packages at once.
 We can use the class <code>JavaImporter</code> to be used in conjunction with the <code>with</code> statement.
@@ -733,7 +769,7 @@ All class files from the imported packages are accessible within the local scope
 </div>
 </div>
 <div class="sect2">
-<h3 id="_packages">3.8. Packages</h3>
+<h3 id="_packages">3.10. Packages</h3>
 <div class="paragraph">
 <p>Packages and related objects are there to support java package, class access from script.
 The properties of the <code>Packages</code> variable are all the top-level Java packages, such as <code>java</code>, <code>javax</code> etc.</p>
@@ -766,7 +802,7 @@ jjs&gt; javax.swing.JFrame
 </div>
 </div>
 <div class="sect2">
-<h3 id="_typed_arrays">3.9. Typed Arrays</h3>
+<h3 id="_typed_arrays">3.11. Typed Arrays</h3>
 <div class="paragraph">
 <p>Native JavaScript arrays are untyped.
 Nashorn implements typed arrays as specified at <a href="https://www.khronos.org/registry/typedarray/specs/latest/" class="bare">https://www.khronos.org/registry/typedarray/specs/latest/</a>.</p>
@@ -806,7 +842,7 @@ Strings will automatically be converted to <code>int</code>, if possible.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_collections_and_for_each">3.10. Collections and For-Each</h3>
+<h3 id="_collections_and_for_each">3.12. Collections and For-Each</h3>
 <div class="paragraph">
 <p>Array handling in JavaScript is sometimes annoying. Let&#8217;s use Java collections instead!</p>
 </div>
@@ -840,7 +876,7 @@ map.put(<span class="string"><span class="delimiter">'</span><span class="conten
 </div>
 </div>
 <div class="sect2">
-<h3 id="_convert_arrays">3.11. Convert Arrays</h3>
+<h3 id="_convert_arrays">3.13. Convert Arrays</h3>
 <div class="paragraph">
 <p>Some packages like <code>java.util</code> (and <code>java.lang</code>) can be accessed directly without utilizing <code>Java.type</code> or <code>JavaImporter</code>:</p>
 </div>
@@ -872,7 +908,7 @@ print(Object.prototype.toString.call(jsArray));  <span class="comment">// [objec
 </div>
 </div>
 <div class="sect2">
-<h3 id="_lambdas_and_streams">3.12. Lambdas and Streams</h3>
+<h3 id="_lambdas_and_streams">3.14. Lambdas and Streams</h3>
 <div class="paragraph">
 <p>As Lambdas and Streams are available since Java 8, it&#8217;s also possible to work with them in Nashorn! \o/</p>
 </div>
@@ -904,9 +940,41 @@ list
 <span class="comment">// a1, a2, a3</span></code></pre>
 </div>
 </div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+Where ever a Java 8 Lambda or SAM (single-abstract-method) type is required, an ECMAScript function can be passed as argument!
+</td>
+</tr>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_every_lambda_is_a_script_function">3.14.1. Every Lambda is a Script Function</h4>
+<div class="paragraph">
+<p>Any Java object that is an instance of lambda type can be treated like a script function.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="javascript"><span class="keyword">var</span> JFunction = Java.type(<span class="string"><span class="delimiter">'</span><span class="content">java.util.function.Function</span><span class="delimiter">'</span></span>)
+
+<span class="keyword">var</span> obj = <span class="keyword">new</span> JFunction() {
+   <span class="function">apply</span>: <span class="keyword">function</span>(x) { print(x * x) }
+}
+
+print(<span class="keyword">typeof</span> obj); <span class="comment">// prints &quot;function&quot;</span>
+
+<span class="comment">// 'calls' lambda as though it is a function</span>
+obj(<span class="integer">23</span>);</code></pre>
+</div>
+</div>
+</div>
 </div>
 <div class="sect2">
-<h3 id="_extending_classes">3.13. Extending Classes</h3>
+<h3 id="_extending_classes">3.15. Extending Classes</h3>
 <div class="paragraph">
 <p>Java types can simply be extended with the <code>Java.extend</code> extension.</p>
 </div>
@@ -944,7 +1012,7 @@ As you can see, even multi-threaded code is possible in Nashorn.
 </div>
 </div>
 <div class="sect2">
-<h3 id="_calling_super">3.14. Calling Super</h3>
+<h3 id="_calling_super">3.16. Calling Super</h3>
 <div class="paragraph">
 <p>Accessing overridden members in JavaScript is traditionally awkward because Javas <code>super</code> keyword doesn&#8217;t exist in ECMAScript.
 Luckily nashorn goes to the rescue.</p>
@@ -969,7 +1037,7 @@ The syntax of overriding members is borrowed from Javas anonymous objects.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="javascript"><span class="keyword">var</span> SuperRunner = Java.type(<span class="string"><span class="delimiter">'</span><span class="content">dasniko.SuperRunner</span><span class="delimiter">'</span></span>);
+<pre class="CodeRay highlight"><code data-lang="javascript"><span class="keyword">var</span> SuperRunner = Java.type(<span class="string"><span class="delimiter">'</span><span class="content">my.package.SuperRunner</span><span class="delimiter">'</span></span>);
 <span class="keyword">var</span> Runner = Java.extend(SuperRunner);
 
 <span class="keyword">var</span> runner = <span class="keyword">new</span> Runner() {
@@ -989,7 +1057,7 @@ runner.run();
 </div>
 </div>
 <div class="sect2">
-<h3 id="_loading_scripts">3.15. Loading Scripts</h3>
+<h3 id="_loading_scripts">3.17. Loading Scripts</h3>
 <div class="paragraph">
 <p>Loading and evaluating additional script files from Nashorn JavaScript is quite easy with the <code>load</code> function.
 We can load local and external files.</p>
@@ -1010,7 +1078,7 @@ print(now);
 <p>The (external) script will be evaluated in the same context, so we can access the <code>moment</code> function directly.</p>
 </div>
 <div class="sect3">
-<h4 id="_load_in_new_global_context">3.15.1. Load in new Global Context</h4>
+<h4 id="_load_in_new_global_context">3.17.1. Load in new Global Context</h4>
 <div class="paragraph">
 <p>Loading external files can break your own code, when it is using same variable names as your code!
 To avoid this, files can be loaded into a new global scope:</p>
@@ -1022,6 +1090,125 @@ To avoid this, files can be loaded into a new global scope:</p>
 </div>
 <div class="paragraph">
 <p>Of course, the script is then only available in the Nashorn global context (not current engine context).</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_error_object">3.18. Error Object</h3>
+<div class="paragraph">
+<p>Nashorn extends the ECMAScript standard <code>Error</code> object by a few more interesting informations.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="javascript"><span class="keyword">function</span> <span class="function">func</span>() {
+    <span class="keyword">throw</span> <span class="keyword">new</span> Error();
+}
+
+<span class="keyword">function</span> <span class="function">f</span>() {
+    func();
+}
+
+<span class="keyword">try</span> {
+    f()
+} <span class="keyword">catch</span> (e) {
+    print(e.stack);
+    print(e.lineNumber);
+    print(e.columnNumber);
+    print(e.fileName);
+
+    e.printStackTrace();
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_scripting_mode_extension_objects">3.19. Scripting Mode Extension Objects</h3>
+<div class="paragraph">
+<p>There are some global object defined in Nashorn, when <code>-scripting</code> mode is enabled.</p>
+</div>
+<div class="paragraph">
+<p>Most of them are self-explaining, so I provided just some source code examples:</p>
+</div>
+<div class="sect3">
+<h4 id="__arg">3.19.1. $ARG</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ jjs -scripting -- arg1 arg2 arg3
+jjs&gt; $ARG
+arg1,arg2,arg3
+jjs&gt; $ARG[1]
+arg2</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="__env">3.19.2. $ENV</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="javascript"><span class="comment">// print $JAVA_HOME and $PATH from the OS shell</span>
+print(<span class="predefined">$ENV</span>[<span class="string"><span class="delimiter">&quot;</span><span class="content">JAVA_HOME</span><span class="delimiter">&quot;</span></span>])
+print(<span class="predefined">$ENV</span>[<span class="string"><span class="delimiter">&quot;</span><span class="content">PATH</span><span class="delimiter">&quot;</span></span>])
+print(<span class="predefined">$ENV</span>.JAVA_HOME)
+print(<span class="predefined">$ENV</span>.PATH)</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="__exec">3.19.3. $EXEC</h4>
+<div class="paragraph">
+<p>Launch processes to run commands.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">jjs&gt; $EXEC(&quot;ls -l&quot;)
+total 0
+drwxr-xr-x+ 1 johndoe staff 4096 Dec 31 12:34 dir
+-rwxrw-r--  1 johndoe staff  168 Dec 31 13:37 file.txt
+
+jjs&gt; $EXEC(&quot;cat&quot;, &quot;Send this to stdout&quot;)
+Send this to stdout</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="__out">3.19.4. $OUT</h4>
+<div class="paragraph">
+<p>Store the latest standard output (stdout) of the process spawned by <code>$EXEC</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="javascript"><span class="comment">// use curl to download JSON weather data from the net</span>
+<span class="keyword">var</span> str = <span class="error">`</span>curl http:<span class="comment">//api.openweathermap.org/data/2.5/weather?q=Hamburg,de&amp;units=metric&amp;appid=44db6a862fba0b067b1930da0d769e98`;</span>
+
+<span class="comment">// parse JSON and print the current temperature</span>
+<span class="keyword">var</span> weather = JSON.parse(<span class="predefined">$OUT</span>);
+print(weather.main.temp);</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="__err">3.19.5. $ERR</h4>
+<div class="paragraph">
+<p>Store the latest standard error (stderr) of the process spawned by <code>$EXEC</code>.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="__exit">3.19.6. $EXIT</h4>
+<div class="paragraph">
+<p>Store the exit code of the process spawned by <code>$EXEC</code>.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="__options">3.19.7. $OPTIONS</h4>
+<div class="paragraph">
+<p>This property exposes command line options, which are passed (explit or implicitly) to Nashorn "command line".</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="javascript">print(<span class="string"><span class="delimiter">&quot;</span><span class="content">-scripting = </span><span class="delimiter">&quot;</span></span> + <span class="predefined">$OPTIONS</span>._scripting);         <span class="comment">// -scripting = true</span>
+print(<span class="string"><span class="delimiter">&quot;</span><span class="content">--compile-only = </span><span class="delimiter">&quot;</span></span> + <span class="predefined">$OPTIONS</span>._compile_only);  <span class="comment">// --compile-only = false</span>
+print(<span class="string"><span class="delimiter">&quot;</span><span class="content">-timezone = </span><span class="delimiter">&quot;</span></span> + <span class="predefined">$OPTIONS</span>._timezone.ID);        <span class="comment">// -timezone = Europe/Berlin</span></code></pre>
+</div>
 </div>
 <hr>
 <div class="admonitionblock note">
@@ -1122,7 +1309,7 @@ console.log = print;</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-01-29 10:14:18 UTC
+Last updated 2016-01-29 16:11:20 UTC
 </div>
 </div>
 </body>
