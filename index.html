@@ -75,11 +75,10 @@
 </ul>
 </li>
 <li><a href="#_javafx_with_javascript">6. JavaFX with JavaScript</a></li>
-<li><a href="#_testing_of_nashorn_scripts">7. Testing of Nashorn Scripts</a>
+<li><a href="#_testing_and_debugging_of_nashorn_scripts">7. Testing and Debugging of Nashorn Scripts</a>
 <ul class="sectlevel2">
-<li><a href="#_junit">7.1. JUnit</a></li>
-<li><a href="#_spock">7.2. Spock</a></li>
-<li><a href="#_jasmine">7.3. Jasmine</a></li>
+<li><a href="#_testing">7.1. Testing</a></li>
+<li><a href="#_debugging">7.2. Debugging</a></li>
 </ul>
 </li>
 </ul>
@@ -1290,26 +1289,209 @@ console.log = print;</code></pre>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_testing_of_nashorn_scripts">7. Testing of Nashorn Scripts</h2>
+<h2 id="_testing_and_debugging_of_nashorn_scripts">7. Testing and Debugging of Nashorn Scripts</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_junit">7.1. JUnit</h3>
+<h3 id="_testing">7.1. Testing</h3>
+<div class="paragraph">
+<p>Testing of Nashorn scripts is not that hard as it may look like if you&#8217;re not used to it.</p>
+</div>
+<div class="sect3">
+<h4 id="_function_al_testing_with_junit">7.1.1. Function(al) testing with JUnit</h4>
+<div class="paragraph">
+<p>Because every JavaScript function has a return value (yes, every JavaScript function, even functions which have no explicit return value will return <code>undefined</code>), these values can be asserted.
+Just built up your JavaScript file properly and working with testable, independend, hopefully atomic, functions, just as you would develop your Java methods.
+Then, you can just call a JS function in your test and assert the result.</p>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s assume we have the following JavaScript code:</p>
+</div>
+<div class="listingblock">
+<div class="title">calc.js</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="javascript"><span class="keyword">var</span> <span class="function">add</span> = <span class="keyword">function</span>(a, b) {
+    <span class="keyword">return</span> a + b;
+}
 
+<span class="keyword">var</span> <span class="function">square</span> = <span class="keyword">function</span>(a) {
+    <span class="keyword">return</span> a * a;
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can then test the functions with a standard JUnit test</p>
+</div>
+<div class="listingblock">
+<div class="title">CalculatorTest.java</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="directive">public</span> <span class="type">class</span> <span class="class">CalculatorTest</span> {
+
+    ScriptEngine nashorn;
+
+    <span class="annotation">@Before</span>
+    <span class="directive">public</span> <span class="type">void</span> setup() {
+        nashorn = <span class="keyword">new</span> ScriptEngineManager().getEngineByName(<span class="string"><span class="delimiter">&quot;</span><span class="content">nashorn</span><span class="delimiter">&quot;</span></span>);
+        nashorn.eval(<span class="keyword">new</span> <span class="predefined-type">InputStreamReader</span>(
+                getClass().getClassLoader().getResourceAsStream(<span class="string"><span class="delimiter">&quot;</span><span class="content">/calc.js</span><span class="delimiter">&quot;</span></span>)));
+    }
+
+    <span class="annotation">@Test</span>
+    <span class="directive">public</span> <span class="type">void</span> testAdd() <span class="directive">throws</span> <span class="exception">Exception</span> {
+        <span class="predefined-type">Object</span> result = ((Invocable) nashorn).invokeFunction(<span class="string"><span class="delimiter">&quot;</span><span class="content">add</span><span class="delimiter">&quot;</span></span>, <span class="integer">1</span>, <span class="integer">2</span>);
+        Assert.assertEquals(<span class="integer">1</span>, result);
+    }
+
+    <span class="annotation">@Test</span>
+    <span class="directive">public</span> <span class="type">void</span> testSquare() <span class="directive">throws</span> <span class="exception">Exception</span> {
+        <span class="predefined-type">Object</span> result = ((Invocable) nashorn).invokeFunction(<span class="string"><span class="delimiter">&quot;</span><span class="content">square</span><span class="delimiter">&quot;</span></span>, <span class="integer">2</span>);
+        Assert.assertEquals(<span class="integer">4</span>, result);
+    }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_mocking_javascript_functions_using_spock">7.1.2. Mocking JavaScript functions &amp; using Spock</h4>
+<div class="paragraph">
+<p>A much more nicer (and also more powerful) way of testing Nashorn scripts is to use <a href="https://code.google.com/p/spock">Spock</a> instead of JUnit.
+Spock is based on Groovy code and since Groovy is also a dynamic language, it&#8217;s easier to handle objects and functions created with Groovy between Nashorn and your tests (or <em>specs</em>, as tests are called in Spock).</p>
+</div>
+<div class="paragraph">
+<p>With Spock it becomes very easy to mock functions, which aren&#8217;t under your control or which are not available in Nashorn.
+This could be callback functions (which are widely used in JavaScript), which you don&#8217;t want to execute during your test, or e.g. the <code>alert()</code> function, which Nashorn doesn&#8217;t know.</p>
+</div>
+<div class="listingblock">
+<div class="title">Callback.groovy</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">class</span> <span class="class">CallbackSpec</span> {
+
+    <span class="annotation">@Shared</span> ScriptEngine nashorn = <span class="keyword">new</span> ScriptEngineManager().getEngineByName(<span class="string"><span class="delimiter">'</span><span class="content">nashorn</span><span class="delimiter">'</span></span>);
+
+    <span class="keyword">def</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">callback</span><span class="delimiter">&quot;</span></span>() { <i class="conum" data-value="1"></i><b>(1)</b>
+        <span class="key">given</span>:
+        nashorn.eval(<span class="string"><span class="delimiter">'</span><span class="content">function callMe(callback) { return callback(&quot;&quot;) + &quot; Doe&quot;; }</span><span class="delimiter">'</span></span>)
+
+        <span class="key">when</span>:
+        <span class="keyword">def</span> result = nashorn.invokeFunction(<span class="string"><span class="delimiter">'</span><span class="content">callMe</span><span class="delimiter">'</span></span>, { <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="content">John</span><span class="delimiter">'</span></span> } <span class="keyword">as</span> Function)
+
+        <span class="key">then</span>:
+        result == <span class="string"><span class="delimiter">'</span><span class="content">John Doe</span><span class="delimiter">'</span></span>
+    }
+
+    <span class="keyword">def</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">mocked callback</span><span class="delimiter">&quot;</span></span>() { <i class="conum" data-value="2"></i><b>(2)</b>
+        <span class="key">given</span>:
+        nashorn.eval(<span class="string"><span class="delimiter">'</span><span class="content">function callMe(callback) { return callback(&quot;&quot;) + &quot; Doe&quot;; }</span><span class="delimiter">'</span></span>)
+        <span class="keyword">def</span> callback = Mock(Function)
+
+        <span class="key">when</span>:
+        <span class="keyword">def</span> result = nashorn.invokeFunction(<span class="string"><span class="delimiter">'</span><span class="content">callMe</span><span class="delimiter">'</span></span>, callback)
+
+        <span class="key">then</span>:
+        <span class="integer">1</span> * callback.apply(<span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>) &gt;&gt; <span class="string"><span class="delimiter">'</span><span class="content">John</span><span class="delimiter">'</span></span>
+        result == <span class="string"><span class="delimiter">'</span><span class="content">John Doe</span><span class="delimiter">'</span></span>
+    }
+
+    <span class="keyword">def</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">alert</span><span class="delimiter">&quot;</span></span>() { <i class="conum" data-value="3"></i><b>(3)</b>
+        <span class="key">given</span>:
+        nashorn.eval(<span class="string"><span class="delimiter">'</span><span class="content">function alertMe() { alert(&quot;Huh!&quot;); }</span><span class="delimiter">'</span></span>)
+        <span class="keyword">def</span> alert = Mock(Function)
+        nashorn.put(<span class="string"><span class="delimiter">'</span><span class="content">alert</span><span class="delimiter">'</span></span>, alert)
+
+        <span class="key">when</span>:
+        nashorn.invokeFunction(<span class="string"><span class="delimiter">'</span><span class="content">alertMe</span><span class="delimiter">'</span></span>)
+
+        <span class="key">then</span>:
+        <span class="integer">1</span> * alert.apply(<span class="string"><span class="delimiter">'</span><span class="content">Huh!</span><span class="delimiter">'</span></span>)
+    }
+
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>This function gets a another callback function (of type <code>java.util.function.Function</code>) injected when invoking the test.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>In this function the callback function is being mocked and afterwards it&#8217;s being tested, if the mock function was called once with value <em>"John"</em>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Because there is no <code>alert()</code> function available in Nashorn, we have to mock it also and add it to the Nashorn context before invoking the actual function.</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Further examples with Spock and Nashorn can be found in the GitHub repository <a href="https://github.com/dasniko/nashorn-spock-jasmine">dasniko/nashorn-spock-jasmine</a>.
+</td>
+</tr>
+</table>
+</div>
+</div>
 </div>
 <div class="sect2">
-<h3 id="_spock">7.2. Spock</h3>
-
+<h3 id="_debugging">7.2. Debugging</h3>
+<div class="paragraph">
+<p>Debugging of Nashorn JavaScript is supported by major IDEs like</p>
 </div>
-<div class="sect2">
-<h3 id="_jasmine">7.3. Jasmine</h3>
-
+<div class="ulist">
+<ul>
+<li>
+<p>JetBrains <strong>IntelliJ IDEA</strong> (since version 13.1)</p>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://blog.jetbrains.com/idea/2014/03/debugger-for-jdk8s-nashorn-javascript-in-intellij-idea-13-1/" class="bare">https://blog.jetbrains.com/idea/2014/03/debugger-for-jdk8s-nashorn-javascript-in-intellij-idea-13-1/</a></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Oracle <strong>Netbeans</strong> (since version 8)</p>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="http://wiki.netbeans.org/NetBeans_80_NewAndNoteworthy#JavaScript_in_Nashorn" class="bare">http://wiki.netbeans.org/NetBeans_80_NewAndNoteworthy#JavaScript_in_Nashorn</a></p>
+</li>
+<li>
+<p><a href="https://blogs.oracle.com/geertjan/entry/youtube_debugger_for_jdk8_s" class="bare">https://blogs.oracle.com/geertjan/entry/youtube_debugger_for_jdk8_s</a></p>
+</li>
+<li>
+<p><a href="https://blogs.oracle.com/sundararajan/entry/remote_debugging_of_nashorn_scripts" class="bare">https://blogs.oracle.com/sundararajan/entry/remote_debugging_of_nashorn_scripts</a></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Eclipse</strong></p>
+<div class="ulist">
+<ul>
+<li>
+<p>should be possible with <a href="https://github.com/Nodeclipse/nodeclipse-1">Nodeclipse</a></p>
+</li>
+<li>
+<p><em>(no further info available, as I&#8217;m not an Eclipse user anymore&#8230;&#8203;)</em></p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-01-29 16:11:20 UTC
+Last updated 2016-02-11 07:03:19 UTC
 </div>
 </div>
 </body>
