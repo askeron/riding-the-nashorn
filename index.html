@@ -68,10 +68,10 @@
 </li>
 <li><a href="#_isomorphic_javascript">5. Isomorphic JavaScript</a>
 <ul class="sectlevel2">
-<li><a href="#_isomorphic">5.1. Isomorphic?</a></li>
+<li><a href="#_what_does_em_isomorphic_em_mean_what_can_i_do_with_it_and_why_should_i_use_it">5.1. What does <em>Isomorphic</em> mean, what can I do with it and why should I use it?</a></li>
 <li><a href="#_react_js">5.2. React.js</a></li>
-<li><a href="#_spring_boot_mvc">5.3. Spring Boot MVC</a></li>
-<li><a href="#_java_ee_8_mvc_1_0">5.4. Java EE 8 MVC 1.0</a></li>
+<li><a href="#_spring_boot_mvc_for_isomorphic_apps">5.3. Spring Boot MVC for Isomorphic Apps</a></li>
+<li><a href="#_java_ee_8_mvc_1_0_for_isomorphic_apps">5.4. Java EE 8 MVC 1.0 for Isomorphic Apps</a></li>
 </ul>
 </li>
 <li><a href="#_javafx_with_javascript">6. JavaFX with JavaScript</a></li>
@@ -1265,20 +1265,646 @@ console.log = print;</code></pre>
 <h2 id="_isomorphic_javascript">5. Isomorphic JavaScript</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_isomorphic">5.1. Isomorphic?</h3>
-
+<h3 id="_what_does_em_isomorphic_em_mean_what_can_i_do_with_it_and_why_should_i_use_it">5.1. What does <em>Isomorphic</em> mean, what can I do with it and why should I use it?</h3>
+<div class="paragraph">
+<p>Isomorphic comes from the Greek <em>"isos"</em> for <em>"equal"</em> and <em>"morph"</em> for <em>"shape"</em>.</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>Isomorphism describes that if you look at the same entity &lt;1&gt; in two different contexts &lt;2&gt;, you should get the same thing &lt;3&gt;.</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; <a href="http://isomorphic.net/javascript" class="bare">http://isomorphic.net/javascript</a>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>code</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>client and server</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>result, html, DOM, etc.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>In our case:</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>If we use the same code on client and server, we should get the same result/html.</p>
+</div>
+</blockquote>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/isomorphic.png" alt="Isomorphic">
+</div>
+</div>
+<div class="sect3">
+<h4 id="_isomorphic_code">5.1.1. Isomorphic code</h4>
+<div class="paragraph">
+<p>Isomorphic code supports you to code with the <strong>DRY principle</strong> (Don&#8217;t Repeat Yourself), as you can <strong>share the same logic</strong> on client and server side.
+You only have to develop your application logic once and <strong>maintain only one codebase</strong>.
+In cases of errors, there is only one <strong>single point of truth</strong> <em>(or failure)</em> to lookup for the fix.
+And last, but not least, isomorphic code leads you and your developers to be able to focus on a <strong>single technology</strong>, so you don&#8217;t have to be experts on multiple programming languages.</p>
+</div>
+<div class="sect4">
+<h5 id="_example">Example</h5>
+<div class="paragraph">
+<p>Think of your perfect password validation function, which you developed in JavaScript for the usage in the browser.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="javascript"><span class="keyword">function</span> <span class="function">isPasswordValid</span>(password) {
+    <span class="keyword">var</span> score = scorePasswordStrength(password);
+    <span class="keyword">return</span> score &gt;= <span class="integer">3</span>;
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This works pretty well, but to prevent that users disable JavaScript in the browser and pass an invalid password to the server,
+you&#8217;ll have to develp the same logic again the programming language used on the server, perhaps Java.
+This is additional effort, can lead to implementation errors, something may be forgotten in implementation, latest on maintenance.
+<em>Why not re-use the above logic in your Java code?</em></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="directive">public</span> <span class="predefined-type">Boolean</span> isPasswordValid(<span class="predefined-type">String</span> password) {
+    <span class="keyword">try</span> {
+        <span class="keyword">return</span> (<span class="predefined-type">Boolean</span>) nashorn.invokeFunction(<span class="string"><span class="delimiter">&quot;</span><span class="content">isPasswordValid</span><span class="delimiter">&quot;</span></span>, password);
+    } <span class="keyword">catch</span> (ScriptException | <span class="exception">NoSuchMethodException</span> e) {
+        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="exception">RuntimeException</span>(e);
+    }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_spas">5.1.2. SPAs</h4>
+<div class="paragraph">
+<p>Most of modern <em>Single Page Web Applications</em> (SPA), only consist of just a html skeleton and one or more JavaScript libraries,
+which render the whole application UI and is responsible for all transitions, path routings, navigations and logic:</p>
+</div>
+<div class="listingblock">
+<div class="title">index.html</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;html&gt;</span>
+<span class="tag">&lt;head&gt;</span>
+    <span class="tag">&lt;title&gt;</span>Awesome Website<span class="tag">&lt;/title&gt;</span>
+    <span class="tag">&lt;script</span> <span class="attribute-name">src</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">./app-bundle.js</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span><span class="tag">&lt;/script&gt;</span>
+<span class="tag">&lt;/head&gt;</span>
+<span class="tag">&lt;body&gt;</span><span class="tag">&lt;/body&gt;</span>
+<span class="tag">&lt;/html&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>These applications are (mostyl) awesome, but have some drawbacks:</p>
+</div>
+<div class="sect4">
+<h5 id="_cons">Cons</h5>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>UX / Performance</strong> - The user doesn&#8217;t see anything before the whole script code is loaded, evaluated and executed on the client/browser.</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Long wait time, even on fast internet connections.</p>
+</li>
+<li>
+<p>Users will possibly go away (3sec. rule!).</p>
+</li>
+<li>
+<p>Think of slow internet connections!</p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p><strong>Legacy Browsers</strong> (and there are still a lot out there!) can&#8217;t evaluate your fancy new JavaScript stuff.</p>
+</li>
+<li>
+<p><strong>SEO</strong> - Search engines can&#8217;t index your website, because there is no content!</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Even if Google can now evaluate JavaScript on websites, it&#8217;s still error-prone and a mess!</p>
+</li>
+</ol>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>So, perhaps it&#8217;s better to render the web pages on the server?</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_pros">Pros</h5>
+<div class="paragraph">
+<p>But what about</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>UX</strong> - cool transition effects</p>
+</li>
+<li>
+<p><strong>Performance</strong> - faster rendering of only parts/fragments of the entire page</p>
+</li>
+<li>
+<p><strong>Performance</strong> - only send the needed data over the wire, instead of the whole html page</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>These advantages can only be achieved by running the application and rendering the pages on the client!</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_possible_solution">Possible Solution</h5>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>User requests (first) URL</p>
+</li>
+<li>
+<p><strong>Server</strong> fetches content for that URL</p>
+</li>
+<li>
+<p><strong>Server</strong> renders content to a response</p>
+</li>
+<li>
+<p>User enjoys the content</p>
+</li>
+<li>
+<p>in the meantime, the <strong>client is initialized</strong></p>
+</li>
+<li>
+<p>User nagivates to a different URL</p>
+</li>
+<li>
+<p><strong>Client</strong> fetches content for that URL</p>
+</li>
+<li>
+<p><strong>Client</strong> renders content to the DOM</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>So, everytime a user makes an intial request to the app or an app path, the server should render the page and sends it to the client.
+From that moment on, the client can takeover control and proceed with rendering the content.
+This bridges the gap to initialize the client while the user can consume the intial server-side rendered page.
+Additionally, search engines get valid html with already rendered content if the want to index your site.
+And legacy browsers are also able to consume your site, if not only the client is able to render your pages.</p>
+</div>
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_react_js">5.2. React.js</h3>
-
+<div class="paragraph">
+<p><a href="http://reactjs.org" target="_blank">React.js</a> is a <strong><em>JavaScript library for building user interfaces</em></strong>, invented by Facebook.
+It&#8217;s not a full-stack client framework for building apps.
+In means of MVC or MVVM, React.js only reflects the <strong><em>V</em></strong>(iew) part.</p>
+</div>
+<div class="paragraph">
+<p>React is component based and has a virtual DOM. With this virtual DOM and building <em>diffs</em>, it&#8217;s possible to have page/content transitions and updates without flickering.
+Additionally, React supports server-side rendering of templates.</p>
+</div>
+<div class="sect3">
+<h4 id="_flux">5.2.1. Flux</h4>
+<div class="paragraph">
+<p>For building full-stack apps with React, there&#8217;s an architecture approach, called <a href="https://facebook.github.io/flux" target="_blank">Flux</a>.
+This architecture is a straight-forward approach and relies on immutable entities and collections.
+The state of the application is stored in a so called <code>Store</code>, the store represents the data for rendering the templates.
+The store may only be modified by a <code>Dispatcher</code>, which will get events (with data) from an <code>Actions</code>.
+Actions are the ones, who may communicate with the outside-world (e.g. service calls).</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/flux.png" alt="Flux Architecture">
+</div>
+</div>
+<div class="paragraph">
+<p>The currently most popular Flux implementation library is called <a href="http://redux.js.org/" target="_blank">Redux</a>.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_jsx">5.2.2. JSX</h4>
+<div class="paragraph">
+<p>React.js makes heavy use of <a href="https://jsx.github.io/" target="_blank">JSX</a>, a new JavaScript dialect, mixxed with HTML elements.
+<em>Perhaps it&#8217;s a bit strange when using it first, but it comes handy while using it more and more.</em></p>
+</div>
+<div class="listingblock">
+<div class="title">app.jsx</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="javascript"><span class="keyword">var</span> Book = React.createClass({
+    <span class="function">render</span>: <span class="keyword">function</span> () {
+        <span class="keyword">return</span> (
+            <span class="tag">&lt;div</span> <span class="attribute-name">className</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">book</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+                <span class="tag">&lt;h3&gt;</span>{this.props.author}<span class="tag">&lt;/h3&gt;</span>
+                <span class="tag">&lt;div</span> <span class="attribute-name">className</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">lead</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>{this.props.children.toString()}<span class="tag">&lt;/div&gt;</span>
+            &lt;<span class="regexp"><span class="delimiter">/</span><span class="content">div&gt;
+        );
+    }
+});</span></span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>JSX will be transpiled (transformed) to executable JavaScript (ES5) by using <a href="https://babeljs.io" target="_blank">Babel.js</a>.
+(Formerlly this was done by <code>JSXTransformer</code>, a library from Facebook, but they switched to Babel, b/c it&#8217;s more powerful.)</p>
+</div>
+<div class="listingblock">
+<div class="title">app.js</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="javascript"><span class="keyword">var</span> Book = React.createClass({<span class="key">displayName</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">Book</span><span class="delimiter">&quot;</span></span>,
+    <span class="function">render</span>: <span class="keyword">function</span> () {
+        <span class="keyword">return</span> (
+            React.createElement(<span class="string"><span class="delimiter">&quot;</span><span class="content">div</span><span class="delimiter">&quot;</span></span>, {<span class="key">className</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">book</span><span class="delimiter">&quot;</span></span>},
+                React.createElement(<span class="string"><span class="delimiter">&quot;</span><span class="content">h3</span><span class="delimiter">&quot;</span></span>, <span class="predefined-constant">null</span>, <span class="local-variable">this</span>.props.author),
+                React.createElement(<span class="string"><span class="delimiter">&quot;</span><span class="content">div</span><span class="delimiter">&quot;</span></span>, {<span class="key">className</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">lead</span><span class="delimiter">&quot;</span></span>}, <span class="local-variable">this</span>.props.children.toString())
+            )
+        );
+    }
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>At runtime, this JavaScript code will be rendered as proper HTML.</p>
+</div>
+<div class="listingblock">
+<div class="title">app.html</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;div</span> <span class="attribute-name">class</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">book</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">data-reactid</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">.1c3dv7jhtco.1.$0</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+    <span class="tag">&lt;h3</span> <span class="attribute-name">data-reactid</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">.1c3dv7jhtco.1.$0.0</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>George Orwell<span class="tag">&lt;/h3&gt;</span>
+    <span class="tag">&lt;div</span> <span class="attribute-name">class</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">lead</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">data-reactid</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">.1c3dv7jhtco.1.$0.1</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>1984<span class="tag">&lt;/div&gt;</span>
+<span class="tag">&lt;/div&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>With the <code>data-reactid</code> attributes, React is able to locate the parts of the (virtual) DOM which have to be changed upon data change.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+To learn more about React.js, JSX and Flux, please refer to their appropriate websites!
+</td>
+</tr>
+</table>
+</div>
+</div>
 </div>
 <div class="sect2">
-<h3 id="_spring_boot_mvc">5.3. Spring Boot MVC</h3>
-
+<h3 id="_spring_boot_mvc_for_isomorphic_apps">5.3. Spring Boot MVC for Isomorphic Apps</h3>
+<div class="paragraph">
+<p>There are several demos using Spring (Boot) MVC and React.js for server-side rendering:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://github.com/sdeleuze/spring-react-isomorphic" target="_blank">sdeleuze/spring-react-isomorphic</a><br>
+by <a href="https://twitter.com/sdeleuze" target="_blank">Sébastien Deleuze</a>, Developer on the Spring Framework team at Pivotal, France</p>
+</li>
+<li>
+<p><a href="https://github.com/winterbe/spring-react-example" target="_blank">winterbe/spring-react-example</a><br>
+by <a href="https://twitter.com/winterbe_" target="_blank">Benjamin Winterberg</a>, Developer from Germany</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Please refer to these links, if you are more interested in building isomorphic applications with Spring MVC.
+</td>
+</tr>
+</table>
+</div>
 </div>
 <div class="sect2">
-<h3 id="_java_ee_8_mvc_1_0">5.4. Java EE 8 MVC 1.0</h3>
+<h3 id="_java_ee_8_mvc_1_0_for_isomorphic_apps">5.4. Java EE 8 MVC 1.0 for Isomorphic Apps</h3>
+<div class="paragraph">
+<p>For the new to come <em>Action-based Web-Framework</em> <a href="https://mvc-spec.java.net/" target="_blank">MVC 1.0</a> in Java EE 8 and its reference implementation <a href="https://ozark.java.net/" target="_blank">Ozark</a>,
+I wrote a <code>ViewEngine</code> based on React.js, and also a working example, based on the React.js tutorial.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://github.com/dasniko/ozark-react" target="_blank">dasniko/ozark-react</a></p>
+</li>
+<li>
+<p><a href="https://github.com/dasniko/ozark-react-example" target="_blank">dasniko/ozark-react-example</a></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The following, simplified code fragments are taken from the two above mentioned repositories to show, how an isomorphic JavaScript/Java EE application is realized.</p>
+</div>
+<div class="paragraph">
+<p>The <code>ReactController</code> is a standard MVC Controller, decorated with the new <code>@Controller</code> annotation.</p>
+</div>
+<div class="listingblock">
+<div class="title">ReactController.java</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@Controller</span><i class="conum" data-value="1"></i><b>(1)</b>
+<span class="annotation">@Path</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">/react</span><span class="delimiter">&quot;</span></span>)
+<span class="directive">public</span> <span class="type">class</span> <span class="class">ReactController</span> {
 
+    <span class="annotation">@Inject</span>
+    <span class="directive">private</span> Models models;<i class="conum" data-value="2"></i><b>(2)</b>
+
+    <span class="annotation">@Inject</span>
+    <span class="directive">private</span> BookService service;<i class="conum" data-value="3"></i><b>(3)</b>
+
+    <span class="annotation">@GET</span>
+    <span class="directive">public</span> <span class="predefined-type">String</span> index() <span class="directive">throws</span> <span class="exception">Exception</span> {
+        <span class="predefined-type">List</span>&lt;<span class="predefined-type">Book</span>&gt; books = service.getBooks();
+        models.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">data</span><span class="delimiter">&quot;</span></span>, books);<i class="conum" data-value="4"></i><b>(4)</b>
+        <span class="keyword">return</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">react:react.jsp</span><span class="delimiter">&quot;</span></span>;<i class="conum" data-value="5"></i><b>(5)</b>
+    }
+
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>MVC Controller annotation</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>MVC internal models entity, just a <code>Map</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>some service to retrieve (and store) data</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>get a <code>List</code> of books and put the Java representation into the models <code>Map</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>return the path to the template to use, with the <code>react:</code> prefix we&#8217;re saying that the <code>ReactViewEngine</code> should be used</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>This is the actual <code>ViewEngine</code> implementation, interacting with React.js</p>
+</div>
+<div class="listingblock">
+<div class="title">ReactViewEngine.java</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="directive">public</span> <span class="type">class</span> <span class="class">ReactViewEngine</span> <span class="directive">extends</span> ServletViewEngine {
+
+    <span class="directive">private</span> <span class="directive">static</span> <span class="directive">final</span> <span class="predefined-type">String</span> viewPrefix = <span class="string"><span class="delimiter">&quot;</span><span class="content">react:</span><span class="delimiter">&quot;</span></span>;
+
+    <span class="annotation">@Inject</span>
+    React react;<i class="conum" data-value="1"></i><b>(1)</b>
+
+    ObjectMapper mapper = <span class="keyword">new</span> ObjectMapper();
+
+    <span class="annotation">@Override</span>
+    <span class="directive">public</span> <span class="type">boolean</span> supports(<span class="predefined-type">String</span> view) {<i class="conum" data-value="2"></i><b>(2)</b>
+        <span class="keyword">return</span> view.startsWith(viewPrefix);
+    }
+
+    <span class="annotation">@Override</span>
+    <span class="directive">public</span> <span class="type">void</span> processView(ViewEngineContext context) <span class="directive">throws</span> ViewEngineException {<i class="conum" data-value="3"></i><b>(3)</b>
+        <span class="comment">// parse view and extract the actual template</span>
+        <span class="predefined-type">String</span> template = context.getView().substring(viewPrefix.length());
+
+        <span class="comment">// get &quot;data&quot; from model</span>
+        Models models = context.getModels();
+        <span class="predefined-type">Object</span> data = models.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">data</span><span class="delimiter">&quot;</span></span>);
+
+        <span class="comment">// call js function on data to generate html</span>
+        <span class="predefined-type">String</span> content = react.render(data);
+
+        <span class="comment">// and put results as string in model</span>
+        models.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">content</span><span class="delimiter">&quot;</span></span>, content);
+        <span class="keyword">try</span> {
+            <span class="comment">// additionally put the data as JSON also to the model</span>
+            <span class="comment">// this overrides the List data stored previously under the same key</span>
+            models.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">data</span><span class="delimiter">&quot;</span></span>, mapper.writeValueAsString(data));
+        } <span class="keyword">catch</span> (JsonProcessingException e) {
+            <span class="keyword">throw</span> <span class="keyword">new</span> ViewEngineException(e);
+        }
+
+        <span class="comment">// create a new context with the actual view and forward to ServletViewEngine</span>
+        ViewEngineContext ctx = <span class="keyword">new</span> ViewEngineContextImpl(template, models,
+                context.getRequest(), context.getResponse(), context.getUriInfo(),
+                context.getResourceInfo(), context.getConfiguration());
+
+        <span class="keyword">try</span> {
+            forwardRequest(ctx, <span class="string"><span class="delimiter">&quot;</span><span class="content">*.jsp</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">*.jspx</span><span class="delimiter">&quot;</span></span>);
+        } <span class="keyword">catch</span> (ServletException | <span class="exception">IOException</span> e) {
+            <span class="keyword">throw</span> <span class="keyword">new</span> ViewEngineException(e);
+        }
+    }
+
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The <code>React</code> clas will interact with the React.js JavaScript code, see next class for details.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The <code>supports()</code> method determines, if this class can be used as an appropriate <code>ViewEngine</code> for a return string of a controller.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>The <code>processView()</code> method actually handles the things to process the view, see inline comments for details.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The <code>React</code> class for interacting with React.js JavaScript code.</p>
+</div>
+<div class="listingblock">
+<div class="title">React.java</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="directive">public</span> <span class="type">class</span> <span class="class">React</span> {
+
+    <span class="directive">private</span> <span class="predefined-type">ThreadLocal</span>&lt;ScriptEngine&gt; engineHolder = <span class="predefined-type">ThreadLocal</span>.withInitial(() -&gt; {<i class="conum" data-value="1"></i><b>(1)</b>
+        ScriptEngine nashorn = <span class="keyword">new</span> ScriptEngineManager().getEngineByName(<span class="string"><span class="delimiter">&quot;</span><span class="content">nashorn</span><span class="delimiter">&quot;</span></span>);
+        <span class="keyword">try</span> {
+            nashorn.eval(read(<span class="string"><span class="delimiter">&quot;</span><span class="content">/nashorn-polyfill.js</span><span class="delimiter">&quot;</span></span>));
+            nashorn.eval(read(<span class="string"><span class="delimiter">&quot;</span><span class="content">/META-INF/resources/webjars/react/0.14.2/react.min.js</span><span class="delimiter">&quot;</span></span>));
+            nashorn.eval(read(
+                    <span class="string"><span class="delimiter">&quot;</span><span class="content">/META-INF/resources/webjars/showdown/0.3.1/compressed/showdown.js</span><span class="delimiter">&quot;</span></span>));
+            nashorn.eval(read(<span class="string"><span class="delimiter">&quot;</span><span class="content">/js/bookBox.js</span><span class="delimiter">&quot;</span></span>));
+        } <span class="keyword">catch</span> (ScriptException e) {
+            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="exception">RuntimeException</span>(e);
+        }
+        <span class="keyword">return</span> nashorn;
+    });
+
+    <span class="directive">public</span> <span class="predefined-type">String</span> render(<span class="predefined-type">Object</span> object) {<i class="conum" data-value="2"></i><b>(2)</b>
+        <span class="keyword">try</span> {
+            <span class="predefined-type">Object</span> html =
+                    ((Invocable) engineHolder.get()).invokeFunction(<span class="string"><span class="delimiter">&quot;</span><span class="content">renderServer</span><span class="delimiter">&quot;</span></span>, object);
+            <span class="keyword">return</span> <span class="predefined-type">String</span>.valueOf(html);
+        } <span class="keyword">catch</span> (<span class="exception">Exception</span> e) {
+            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="exception">IllegalStateException</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">failed to render react component</span><span class="delimiter">&quot;</span></span>, e);
+        }
+    }
+
+    <span class="directive">private</span> <span class="predefined-type">Reader</span> read(<span class="predefined-type">String</span> path) {<i class="conum" data-value="3"></i><b>(3)</b>
+        <span class="keyword">return</span> <span class="keyword">new</span> <span class="predefined-type">InputStreamReader</span>(getClass().getClassLoader().getResourceAsStream(path));
+    }
+
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>initializes a new <code>ThreadLocal&lt;ScriptEngine&gt;</code> with all the needed JS libs, b/c React.js is not thread-safe, so we have to use a dedicated <code>ScriptEngine</code> in each request</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>call the <code>renderServer</code> function of our JSX/JS code and return the result as string (see next)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>just a private class for reducing redundant code</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The original JSX code (which will be rendered to JS before loading it into Nashorn, this can be made during build, or at runtime loading the Babel.js library into the Nashorn <code>ScriptEngine</code>, but this may be lead to even longer load times).</p>
+</div>
+<div class="listingblock">
+<div class="title">bookBox.jsx</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="javascript">...<i class="conum" data-value="1"></i><b>(1)</b>
+
+<span class="keyword">var</span> <span class="function">renderClient</span> = <span class="keyword">function</span> (books) {<i class="conum" data-value="2"></i><b>(2)</b>
+    <span class="keyword">var</span> data = books || [];
+    React.render(
+        <span class="tag">&lt;BookBox</span> <span class="attribute-name">data</span>=<span class="error">{</span><span class="attribute-value">data</span><span class="error">}</span> <span class="attribute-name">url</span>=<span class="string"><span class="delimiter">'</span><span class="content">books.json</span><span class="delimiter">'</span></span> <span class="attribute-name">pollInterval</span>=<span class="error">{</span><span class="attribute-value">5000</span><span class="error">}</span> <span class="tag">/&gt;</span>,
+        document.getElementById(<span class="string"><span class="delimiter">&quot;</span><span class="content">content</span><span class="delimiter">&quot;</span></span>)
+    );
+};
+
+<span class="keyword">var</span> <span class="function">renderServer</span> = <span class="keyword">function</span> (books) {<i class="conum" data-value="3"></i><b>(3)</b>
+    <span class="keyword">var</span> data = Java.from(books);
+    <span class="keyword">return</span> React.renderToString(
+        <span class="tag">&lt;BookBox</span> <span class="attribute-name">data</span>=<span class="error">{</span><span class="attribute-value">data</span><span class="error">}</span> <span class="attribute-name">url</span>=<span class="string"><span class="delimiter">'</span><span class="content">books.json</span><span class="delimiter">'</span></span> <span class="attribute-name">pollInterval</span>=<span class="error">{</span><span class="attribute-value">5000</span><span class="error">}</span> <span class="tag">/&gt;</span>
+    );
+};</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>there&#8217;s of course more code before, but that isn&#8217;t interesting for us at this point</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>this function will be called by the client to initialize the application and to render the content</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>this function will be called by the server (see above) to render the content</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The HTML skeleton, which will be enriched by the server-side rendered code and send to the client.</p>
+</div>
+<div class="listingblock">
+<div class="title">react.jsp</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="error">&lt;</span>%@ page contentType=&quot;text/html;charset=UTF-8&quot; language=&quot;java&quot; %<span class="error">&gt;</span>
+<span class="doctype">&lt;!DOCTYPE html&gt;</span>
+<span class="tag">&lt;html</span> <span class="attribute-name">lang</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">en</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="tag">&lt;head&gt;</span>
+    <span class="tag">&lt;meta</span> <span class="attribute-name">charset</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">utf-8</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+    <span class="tag">&lt;meta</span> <span class="attribute-name">http-equiv</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">X-UA-Compatible</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">content</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">IE=edge</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+    <span class="tag">&lt;meta</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">viewport</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">content</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">width=device-width, initial-scale=1</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+    <span class="tag">&lt;title&gt;</span>ReactJS Bookstore with Ozark<span class="tag">&lt;/title&gt;</span>
+    <span class="tag">&lt;script</span> <span class="attribute-name">src</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">${mvc.contextPath}/webjars/react/0.14.2/react.min.js</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span><span class="tag">&lt;/script&gt;</span>
+    <span class="tag">&lt;script</span> <span class="attribute-name">src</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">${mvc.contextPath}/webjars/showdown/0.3.1/compressed/showdown.js</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span><span class="tag">&lt;/script&gt;</span>
+    <span class="tag">&lt;script</span> <span class="attribute-name">src</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">${mvc.contextPath}/webjars/jquery/1.11.3/jquery.min.js</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span><span class="tag">&lt;/script&gt;</span>
+    <span class="tag">&lt;link</span> <span class="attribute-name">href</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">${mvc.contextPath}/webjars/bootstrap/3.3.5/css/bootstrap.css</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">rel</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">stylesheet</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="tag">&lt;/head&gt;</span>
+
+<span class="tag">&lt;body&gt;</span>
+    <span class="tag">&lt;div</span> <span class="attribute-name">id</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">content</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">class</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">container</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>${content}<span class="tag">&lt;/div&gt;</span><i class="conum" data-value="1"></i><b>(1)</b>
+    <span class="tag">&lt;script</span> <span class="attribute-name">type</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">text/javascript</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">src</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">${mvc.contextPath}/js/bookBox.js</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span><span class="tag">&lt;/script&gt;</span><i class="conum" data-value="2"></i><b>(2)</b>
+    <span class="tag">&lt;script</span> <span class="attribute-name">type</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">text/javascript</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="inline">        <span class="predefined">$</span>(<span class="keyword">function</span> () {
+            renderClient(<span class="predefined">$</span>{data});<i class="conum" data-value="3"></i><b>(3)</b>
+        });</span>
+    <span class="tag">&lt;/script&gt;</span>
+<span class="tag">&lt;/body&gt;</span>
+<span class="tag">&lt;/html&gt;</span></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>the <code>div</code> in which the rendered content will be put, regardless if client or server</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>the actual application script (see above)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>the function which will be called, when the application is executed/initialized on the client-side (the function resides also in <code>bookBox.js</code></td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>If the application is started, without calling the <code>ReactViewEngine</code> in <code>ReactController</code> (e.g. by returning only <code>"react.jsp"</code>, this yields in using the standard JSP ViewEngine),
+there will be no HTML code visible in the <code>&lt;div id="content"/&gt;</code> element if you look at the intial source code received from the server.
+But the content will nevertheless be rendered and displayed in the browser, because of the client-side function call to <code>renderClient()</code>.</p>
+</div>
+<div class="paragraph">
+<p>As soon the application uses the <code>ReactViewEngine</code>, you will see the rendered content also in the <code>&lt;div id="content"/&gt;</code> element, received as source code from the server.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+Use two different browsers and play with the application. Have a look at the application upating itself every 5 seconds and how the source code relates to these updates (or not).
+</td>
+</tr>
+</table>
+</div>
 </div>
 </div>
 </div>
@@ -1491,7 +2117,7 @@ Further examples with Spock and Nashorn can be found in the GitHub repository <a
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-02-11 07:03:19 UTC
+Last updated 2016-02-14 14:04:17 UTC
 </div>
 </div>
 </body>
