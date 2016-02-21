@@ -60,7 +60,7 @@
 <li><a href="#_scripting_mode_extension_objects">3.19. Scripting Mode Extension Objects</a></li>
 </ul>
 </li>
-<li><a href="#_working_with_package_manager">4. Working with Package Manager</a>
+<li><a href="#_working_with_package_managers_repositories">4. Working with Package Managers &amp; Repositories</a>
 <ul class="sectlevel2">
 <li><a href="#_npm">4.1. NPM</a></li>
 <li><a href="#_maven">4.2. Maven</a></li>
@@ -1227,36 +1227,203 @@ An explicit description of all language and API extensions in Nashorn can be fou
 </div>
 </div>
 <div class="sect1">
-<h2 id="_working_with_package_manager">4. Working with Package Manager</h2>
+<h2 id="_working_with_package_managers_repositories">4. Working with Package Managers &amp; Repositories</h2>
 <div class="sectionbody">
+<div class="paragraph">
+<p>When working with Nashorn, you probably don&#8217;t want to develop every function from scratch.
+There are already libraries which provide the functionalites you need.
+Just similar to using a dependency lib from Maven, you can use libraries with Nashorn.
+And more than that, you can choose out of various repositories and package managers,
+as there is Java, JavaScript and the perfect symbiosis of both.</p>
+</div>
 <div class="sect2">
 <h3 id="_npm">4.1. NPM</h3>
+<div class="paragraph">
+<p><strong>N</strong>ode <strong>P</strong>ackage <strong>M</strong>anager - <a href="https://npmjs.org" class="bare">https://npmjs.org</a></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>NPM is the <em>package manager</em> of your choice when working with JavaScript only, no matter if for browser only or also server-side with Node.js.</p>
+</li>
+<li>
+<p>The <em>NPM registry</em> is a public collection of packages of open-source code.</p>
+</li>
+<li>
+<p>NPM is also a <em>command line client</em>.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>You can use packages from NPM within Nashorn! <em>But</em>&#8230;&#8203;</p>
+</div>
 <div class="sect3">
-<h4 id="_polyfill_js">4.1.1. Polyfill.js</h4>
+<h4 id="_jvm_npm">4.1.1. JVM-NPM</h4>
+<div class="paragraph">
+<p>Most/many packages rely on <a href="http://www.commonjs.org/">CommonJS</a> with the <code>require()</code> syntax (kind like an <code>import</code> in Java).
+As Nashorn is just a JavaScript engine, it doesn&#8217;t have support for a package manager and/or a dependency loading mechanism.</p>
+</div>
+<div class="paragraph">
+<p>Luckily there is a project called <a href="https://github.com/nodyn/jvm-npm">npm-jvm</a> (a <em>NPM compliant CommonJS module loader for the JVM</em>),
+which brings the <code>require()</code> function to Nashorn. So it becomes possible to use packages which rely on CommonJS in Nashorn
+and also load other modules by using the <code>require()</code> function into your Nashorn script context.</p>
+</div>
+<div class="sect4">
+<h5 id="_usage">Usage</h5>
+<div class="paragraph">
+<p>Using the global <code>load()</code> function supplied by Nashorn to load <code>jvm-npm.js</code> into the global execution context.
+Then it&#8217;s possible to load any module with <code>require()</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code>nashorn&gt; load('./jvm-npm.js');
+nashorn&gt; var x = require('some_module');</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><span class="small">Alternatively there&#8217;s also a project called <a href="https://github.com/walterhiggins/commonjs-modules-javax-script">commonjs-modules-javax-script</a> which should do similar things.</span></p>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_polyfill_js">4.1.2. Polyfill.js</h4>
+<div class="paragraph">
+<p>Many libraries registered in NPM, make use of the Node.js and/or the common browser APIs.
+As Nashorn isn&#8217;t Node.js nor a browser, we have to add some glue to make it work.
+This glue is called <em>polyfill</em>, to provide functions to a environment, where these functions aren&#8217;t available by default.</p>
+</div>
+<div class="paragraph">
+<p>For most use cases, this <code>nashorn-polyfill.js</code> polyfill should work:</p>
+</div>
 <div class="listingblock">
 <div class="title">nashorn-polyfill.js</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="javascript"><span class="keyword">var</span> global = <span class="local-variable">this</span>;
-<span class="keyword">var</span> window = <span class="local-variable">this</span>;
-<span class="keyword">var</span> process = {<span class="key">env</span>:{}};
+<pre class="CodeRay highlight"><code data-lang="javascript"><span class="keyword">var</span> global = <span class="local-variable">this</span>;<i class="conum" data-value="1"></i><b>(1)</b>
+<span class="keyword">var</span> window = <span class="local-variable">this</span>;<i class="conum" data-value="2"></i><b>(2)</b>
+<span class="keyword">var</span> process = {<span class="key">env</span>:{}};<i class="conum" data-value="3"></i><b>(3)</b>
 
-<span class="keyword">var</span> console = {};
+<span class="keyword">var</span> console = {};<i class="conum" data-value="4"></i><b>(4)</b>
 console.debug = print;
+console.log = print;
 console.warn = print;
-console.log = print;</code></pre>
+console.error = print;</code></pre>
 </div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Node.js has a <code>global</code> variable, which we have to provide - it&#8217;s just the global context.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Browsers have a <code>window</code> variable, referring the global context, we have to provide it also.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Some packages make use of the <code>process.env</code> object of Node.js, as this is also not available, we just provide an empty object.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>Nashorn doesn&#8217;t have a <code>console</code> and arbitrary <code>log</code> statements, so we assign the <code>print</code> function to the most used/common console output functions.</td>
+</tr>
+</table>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_jvm_npm">4.1.2. JVM-NPM</h4>
-
+<h4 id="_native_api_access">4.1.3. Native API access</h4>
+<div class="paragraph">
+<p>Nashorn doesn&#8217;t have access to native language (C/C++) APIs. NPM packages using native APIs can&#8217;t be used in Nashorn.</p>
+</div>
+<div class="paragraph">
+<p>There are discussions out in the wild, if it is possible to use Jython to run Python-based NPM packages inside the JVM,
+but I don’t know of any approach/project testing this.</p>
+</div>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_maven">4.2. Maven</h3>
+<div class="paragraph">
+<p>When using Nashorn within a Java project, it&#8217;s obvious to use Maven as repository and package manager.
+This is possible without problems, but with a few plugins and helpers!</p>
+</div>
 <div class="sect3">
-<h4 id="_nasven">4.2.1. Nasven</h4>
-
+<h4 id="_maven_and_npm_grunt_gulp_etc">4.2.1. Maven and NPM, Grunt, Gulp, etc.</h4>
+<div class="paragraph">
+<p>If you don&#8217;t want to work without the Node.js ecosystem, NPM and frontend build tools like Grunt, Gulp and Webpack,
+there&#8217;s a handy Maven plugin, which solves all your problems:</p>
+</div>
+<div class="paragraph">
+<p><a href="https://github.com/eirslett/frontend-maven-plugin/" class="bare">https://github.com/eirslett/frontend-maven-plugin/</a></p>
+</div>
+<div class="paragraph">
+<p>Please refer to the GitHub page to get a detailed description and documentation of this plugin!</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_webjars">4.2.2. WebJars</h4>
+<div class="paragraph">
+<p>Many of the most popular and most used NPM packages are provided as <a href="http://www.webjars.org/">WebJars</a>.
+With WebJars, you can use NPM packages just as regular Maven dependencies in your project.</p>
+</div>
+<div class="paragraph">
+<p>Example for using <a href="http://momentjs.com/">Moment.js</a> as Maven dependency:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+    <span class="tag">&lt;groupId&gt;</span>org.webjars.npm<span class="tag">&lt;/groupId&gt;</span>
+    <span class="tag">&lt;artifactId&gt;</span>moment<span class="tag">&lt;/artifactId&gt;</span>
+    <span class="tag">&lt;version&gt;</span>2.11.2<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If there is no WebJar of your favourite NPM package available, it&#8217;s easy to create one.
+There&#8217;s a <a href="http://www.webjars.org/contributing">detailed documentation on the website</a>, how to do it.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_nasven">4.2.3. Nasven</h4>
+<div class="paragraph">
+<p><a href="https://github.com/nasven/nasven">Nasven.js</a> is a server, desktop, and shell-script application runtime for apps written in Javascript possibly dependent on Maven artifacts.</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>Nasven = Nashorn + Maven. A tool to get Maven artifacts in scope for Nashorn script execution.</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; <a href="https://twitter.com/lukaseder">Lukas Eder</a>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_some_examples">Some examples</h5>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://github.com/nasven/samples/tree/master/jaxrs">JAX-RS</a></p>
+</li>
+<li>
+<p><a href="https://github.com/nasven/samples/tree/master/camel">Apache Camel</a></p>
+</li>
+</ul>
+</div>
+<hr>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Nearly everything what I wrote about Maven ist somehow available in similar ways/plugins for e.g. Gradle or any other popular build system. Just have a look around in the proper ecosystem!
+</td>
+</tr>
+</table>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -2130,7 +2297,7 @@ Further examples with Spock and Nashorn can be found in the GitHub repository <a
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-02-14 14:20:30 UTC
+Last updated 2016-02-21 13:07:52 UTC
 </div>
 </div>
 </body>
