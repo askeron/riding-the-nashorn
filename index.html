@@ -75,7 +75,11 @@
 <li><a href="#_java_ee_8_mvc_1_0_for_isomorphic_apps">5.4. Java EE 8 MVC 1.0 for Isomorphic Apps</a></li>
 </ul>
 </li>
-<li><a href="#_javafx_with_javascript">6. JavaFX with JavaScript</a></li>
+<li><a href="#_javafx_with_javascript">6. JavaFX with JavaScript</a>
+<ul class="sectlevel3">
+<li><a href="#_complete_list_of_includes">6.1. Complete list of includes</a></li>
+</ul>
+</li>
 <li><a href="#_testing_and_debugging_of_nashorn_scripts">7. Testing and Debugging of Nashorn Scripts</a>
 <ul class="sectlevel2">
 <li><a href="#_testing">7.1. Testing</a></li>
@@ -2092,7 +2096,218 @@ Use two different browsers and play with the application. Have a look at the app
 <div class="sect1">
 <h2 id="_javafx_with_javascript">6. JavaFX with JavaScript</h2>
 <div class="sectionbody">
+<div class="paragraph">
+<p>Nashorn comes with a special support for JavaFX.
+This support can be activated by using the <code>-fx</code> flag on the command-line when using <code>jjs</code>.
+Thus, no additional compile step for the scripted JavaFX and not additonal bootstrapping is needed!</p>
+</div>
+<div class="paragraph">
+<p>The <code>-fx</code> flag on <code>jjs</code> will bootstrap scripts using a <code>javafx.application.Application</code>.</p>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s assume this <em>"Hello World"</em> example written in plain old Java code:</p>
+</div>
+<div class="listingblock">
+<div class="title">HelloWorldFX.java</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="keyword">import</span> <span class="include">javafx.application.Application</span>;
+<span class="keyword">import</span> <span class="include">javafx.event.ActionEvent</span>;
+<span class="keyword">import</span> <span class="include">javafx.event.EventHandler</span>;
+<span class="keyword">import</span> <span class="include">javafx.scene.Scene</span>;
+<span class="keyword">import</span> <span class="include">javafx.scene.control.Button</span>;
+<span class="keyword">import</span> <span class="include">javafx.scene.layout.StackPane</span>;
+<span class="keyword">import</span> <span class="include">javafx.stage.Stage</span>;
 
+<span class="directive">public</span> <span class="type">class</span> <span class="class">HelloWorldFX</span> <span class="directive">extends</span> Application {
+    <span class="directive">public</span> <span class="directive">static</span> <span class="type">void</span> main(<span class="predefined-type">String</span><span class="type">[]</span> args) {
+        launch(args);
+    }
+
+    <span class="annotation">@Override</span>
+    <span class="directive">public</span> <span class="type">void</span> start(Stage primaryStage) {
+        primaryStage.setTitle(<span class="string"><span class="delimiter">&quot;</span><span class="content">Hello World!</span><span class="delimiter">&quot;</span></span>);
+        <span class="predefined-type">Button</span> btn = <span class="keyword">new</span> <span class="predefined-type">Button</span>();
+        btn.setText(<span class="string"><span class="delimiter">&quot;</span><span class="content">Say 'Hello World'</span><span class="delimiter">&quot;</span></span>);
+        btn.setOnAction(<span class="keyword">new</span> <span class="predefined-type">EventHandler</span>&lt;<span class="predefined-type">ActionEvent</span>&gt;() {
+            <span class="annotation">@Override</span>
+            <span class="directive">public</span> <span class="type">void</span> handle(<span class="predefined-type">ActionEvent</span> event) {
+                <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Hello World!</span><span class="delimiter">&quot;</span></span>);
+            }
+        });
+        StackPane root = <span class="keyword">new</span> StackPane();
+        root.getChildren().add(btn);
+        primaryStage.setScene(<span class="keyword">new</span> Scene(root, <span class="integer">300</span>, <span class="integer">200</span>));
+        primaryStage.show();
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This is how it looks like in JavaScript:</p>
+</div>
+<div class="listingblock">
+<div class="title">fxscript.js</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="javascript"><span class="keyword">var</span> Button = Java.type(<span class="string"><span class="delimiter">&quot;</span><span class="content">javafx.scene.control.Button</span><span class="delimiter">&quot;</span></span>);
+<span class="keyword">var</span> StackPane = Java.type(<span class="string"><span class="delimiter">&quot;</span><span class="content">javafx.scene.layout.StackPane</span><span class="delimiter">&quot;</span></span>);
+<span class="keyword">var</span> Scene = Java.type(<span class="string"><span class="delimiter">&quot;</span><span class="content">javafx.scene.Scene</span><span class="delimiter">&quot;</span></span>);
+
+<span class="keyword">function</span> <span class="function">start</span>(stage) {
+    stage.title = <span class="string"><span class="delimiter">&quot;</span><span class="content">Hello World!</span><span class="delimiter">&quot;</span></span>;
+    <span class="keyword">var</span> button = <span class="keyword">new</span> Button();
+    button.text = <span class="string"><span class="delimiter">&quot;</span><span class="content">Say 'Hello World'</span><span class="delimiter">&quot;</span></span>;
+    button.<span class="function">onAction</span> = <span class="keyword">function</span>() {print(<span class="string"><span class="delimiter">&quot;</span><span class="content">Hello World!</span><span class="delimiter">&quot;</span></span>);}
+    <span class="keyword">var</span> root = <span class="keyword">new</span> StackPane();
+    root.children.add(button);
+    stage.scene = <span class="keyword">new</span> Scene(root, <span class="integer">300</span>, <span class="integer">200</span>);
+    stage.show();
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Run the script with</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>$ jjs -fx fxscript.js</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As seen above, a JavaFX script application contains a <code>start()</code> function, which is equivalent to the <code>start()</code> method in its Java counterpart.
+It also can contain the <code>init()</code> and <code>stop()</code> functions.</p>
+</div>
+<div class="paragraph">
+<p>In Nashorn, the explicit usage of the <code>start()</code> function is optional.
+You can use the global <code>$STAGE</code> variable instead of the <code>stage</code> argument of the <code>start()</code> function, which is the primary stage.
+Thus, our script looks like this:</p>
+</div>
+<div class="listingblock">
+<div class="title">fxscript.js</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="javascript"><span class="keyword">var</span> Button = Java.type(<span class="string"><span class="delimiter">&quot;</span><span class="content">javafx.scene.control.Button</span><span class="delimiter">&quot;</span></span>);
+<span class="keyword">var</span> StackPane = Java.type(<span class="string"><span class="delimiter">&quot;</span><span class="content">javafx.scene.layout.StackPane</span><span class="delimiter">&quot;</span></span>);
+<span class="keyword">var</span> Scene = Java.type(<span class="string"><span class="delimiter">&quot;</span><span class="content">javafx.scene.Scene</span><span class="delimiter">&quot;</span></span>);
+
+<span class="predefined">$STAGE</span>.title = <span class="string"><span class="delimiter">&quot;</span><span class="content">Hello World!</span><span class="delimiter">&quot;</span></span>;
+<span class="keyword">var</span> button = <span class="keyword">new</span> Button();
+button.text = <span class="string"><span class="delimiter">&quot;</span><span class="content">Say 'Hello World'</span><span class="delimiter">&quot;</span></span>;
+button.<span class="function">onAction</span> = <span class="keyword">function</span>() {print(<span class="string"><span class="delimiter">&quot;</span><span class="content">Hello World!</span><span class="delimiter">&quot;</span></span>);}
+<span class="keyword">var</span> root = <span class="keyword">new</span> StackPane();
+root.children.add(button);
+<span class="predefined">$STAGE</span>.scene = <span class="keyword">new</span> Scene(root, <span class="integer">300</span>, <span class="integer">200</span>);
+<span class="predefined">$STAGE</span>.show();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For further convenience, there are some predefined includes in the <code>fx:</code> namespace for all of the JavaFX classes.
+With these includes, our script now looks like this:</p>
+</div>
+<div class="listingblock">
+<div class="title">fxscript.js</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="javascript">load(<span class="string"><span class="delimiter">&quot;</span><span class="content">fx:base.js</span><span class="delimiter">&quot;</span></span>);
+load(<span class="string"><span class="delimiter">&quot;</span><span class="content">fx:controls.js</span><span class="delimiter">&quot;</span></span>);
+load(<span class="string"><span class="delimiter">&quot;</span><span class="content">fx:graphics.js</span><span class="delimiter">&quot;</span></span>);
+
+<span class="predefined">$STAGE</span>.title = <span class="string"><span class="delimiter">&quot;</span><span class="content">Hello World!</span><span class="delimiter">&quot;</span></span>;
+<span class="keyword">var</span> button = <span class="keyword">new</span> Button();
+button.text = <span class="string"><span class="delimiter">&quot;</span><span class="content">Say 'Hello World'</span><span class="delimiter">&quot;</span></span>;
+button.<span class="function">onAction</span> = <span class="keyword">function</span>() {print(<span class="string"><span class="delimiter">&quot;</span><span class="content">Hello World!</span><span class="delimiter">&quot;</span></span>);}
+<span class="keyword">var</span> root = <span class="keyword">new</span> StackPane();
+root.children.add(button);
+<span class="predefined">$STAGE</span>.scene = <span class="keyword">new</span> Scene(root, <span class="integer">300</span>, <span class="integer">200</span>);
+<span class="predefined">$STAGE</span>.show();</code></pre>
+</div>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+It&#8217;s highly recommended to use/add only the classes needed by the application.
+But it can be convenient for prototyping and during development, to have all the includes at hand.
+</td>
+</tr>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_complete_list_of_includes">6.1. Complete list of includes</h4>
+<table class="tableblock frame-all grid-all spread">
+<caption class="title">Table 1. FX Includes</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Script</th>
+<th class="tableblock halign-left valign-top">Includes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">fx:base.js</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">javafx.stage.Stage<br>
+ javafx.scene.Scene<br>
+ javafx.scene.Group<br>
+ javafx/beans<br>
+ javafx/collections<br>
+ javafx/events<br>
+ javafx/util</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">fx:graphics.js</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">javafx/animation<br>
+ javafx/application<br>
+ javafx/concurrent<br>
+ javafx/css<br>
+ javafx/geometry<br>
+ javafx/print<br>
+ javafx/scene<br>
+ javafx/stage<br></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">fx:controls.js</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">javafx/scene/chart<br>
+ javafx/scene/control</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">fx:fxml.js</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">javafx/fxml</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">fx:web.js</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">javafx/scene/web</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">fx:media.js</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">javafx/scene/media</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">fx:swing.js</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">javafx/embed/swing</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">fx:swt.js</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">javafx/embed/swt</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Official Oracle documentation including some more examples: <a href="https://docs.oracle.com/javase/8/docs/technotes/guides/scripting/nashorn/javafx.html" class="bare">https://docs.oracle.com/javase/8/docs/technotes/guides/scripting/nashorn/javafx.html</a>
+</td>
+</tr>
+</table>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -2298,7 +2513,7 @@ Further examples with Spock and Nashorn can be found in the GitHub repository <a
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-02-25 17:17:37 UTC
+Last updated 2016-02-28 11:58:21 UTC
 </div>
 </div>
 </body>
