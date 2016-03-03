@@ -41,24 +41,26 @@
 <li><a href="#_api_and_language_extensions">3. API and Language Extensions</a>
 <ul class="sectlevel2">
 <li><a href="#_print_function">3.1. Print Function</a></li>
-<li><a href="#_string_interpolation">3.2. String Interpolation</a></li>
-<li><a href="#_back_quote_exec_expressions">3.3. Back-quote exec expressions</a></li>
-<li><a href="#_java_beans">3.4. Java Beans</a></li>
-<li><a href="#_function_literals">3.5. Function Literals</a></li>
-<li><a href="#_binding_properties">3.6. Binding Properties</a></li>
-<li><a href="#_trimming_strings">3.7. Trimming Strings</a></li>
-<li><a href="#_whereis">3.8. Whereis</a></li>
-<li><a href="#_import_scopes">3.9. Import Scopes</a></li>
-<li><a href="#_packages">3.10. Packages</a></li>
-<li><a href="#_typed_arrays">3.11. Typed Arrays</a></li>
-<li><a href="#_collections_and_for_each">3.12. Collections and For-Each</a></li>
-<li><a href="#_convert_arrays">3.13. Convert Arrays</a></li>
-<li><a href="#_lambdas_and_streams">3.14. Lambdas and Streams</a></li>
-<li><a href="#_extending_classes">3.15. Extending Classes</a></li>
-<li><a href="#_calling_super">3.16. Calling Super</a></li>
-<li><a href="#_loading_scripts">3.17. Loading Scripts</a></li>
-<li><a href="#_error_object">3.18. Error Object</a></li>
-<li><a href="#_scripting_mode_extension_objects">3.19. Scripting Mode Extension Objects</a></li>
+<li><a href="#_reading_stdin">3.2. Reading Stdin</a></li>
+<li><a href="#_reading_files">3.3. Reading Files</a></li>
+<li><a href="#_string_interpolation">3.4. String Interpolation</a></li>
+<li><a href="#_back_quote_exec_expressions">3.5. Back-quote exec expressions</a></li>
+<li><a href="#_java_beans">3.6. Java Beans</a></li>
+<li><a href="#_function_literals">3.7. Function Literals</a></li>
+<li><a href="#_binding_properties">3.8. Binding Properties</a></li>
+<li><a href="#_trimming_strings">3.9. Trimming Strings</a></li>
+<li><a href="#_whereis">3.10. Whereis</a></li>
+<li><a href="#_import_scopes">3.11. Import Scopes</a></li>
+<li><a href="#_packages">3.12. Packages</a></li>
+<li><a href="#_typed_arrays">3.13. Typed Arrays</a></li>
+<li><a href="#_collections_and_for_each">3.14. Collections and For-Each</a></li>
+<li><a href="#_convert_arrays">3.15. Convert Arrays</a></li>
+<li><a href="#_lambdas_and_streams">3.16. Lambdas and Streams</a></li>
+<li><a href="#_extending_classes">3.17. Extending Classes</a></li>
+<li><a href="#_calling_super">3.18. Calling Super</a></li>
+<li><a href="#_loading_scripts">3.19. Loading Scripts</a></li>
+<li><a href="#_error_object">3.20. Error Object</a></li>
+<li><a href="#_scripting_mode_extension_objects">3.21. Scripting Mode Extension Objects</a></li>
 </ul>
 </li>
 <li><a href="#_working_with_package_managers_repositories">4. Working with Package Managers &amp; Repositories</a>
@@ -73,17 +75,13 @@
 <li><a href="#_react_js">5.2. React.js</a></li>
 <li><a href="#_spring_boot_mvc_for_isomorphic_apps">5.3. Spring Boot MVC for Isomorphic Apps</a></li>
 <li><a href="#_java_ee_8_mvc_1_0_for_isomorphic_apps">5.4. Java EE 8 MVC 1.0 for Isomorphic Apps</a></li>
+<li><a href="#_list_of_includes">5.5. List of includes</a></li>
 </ul>
 </li>
-<li><a href="#_javafx_with_javascript">6. JavaFX with JavaScript</a>
-<ul class="sectlevel3">
-<li><a href="#_complete_list_of_includes">6.1. Complete list of includes</a></li>
-</ul>
-</li>
-<li><a href="#_testing_and_debugging_of_nashorn_scripts">7. Testing and Debugging of Nashorn Scripts</a>
+<li><a href="#_testing_and_debugging_of_nashorn_scripts">6. Testing and Debugging of Nashorn Scripts</a>
 <ul class="sectlevel2">
-<li><a href="#_testing">7.1. Testing</a></li>
-<li><a href="#_debugging">7.2. Debugging</a></li>
+<li><a href="#_testing">6.1. Testing</a></li>
+<li><a href="#_debugging">6.2. Debugging</a></li>
 </ul>
 </li>
 </ul>
@@ -99,7 +97,7 @@ Nashorn compiles JavaScript to Java Bytecode during runtime and thus provides hi
 </div>
 <div class="imageblock" style="text-align: center">
 <div class="content">
-<img src="images/nashorn.jpg" alt="Nashorn" width="400">
+<img src="images/nashorn.jpg" alt="Nashorn" width="600">
 </div>
 </div>
 <div class="paragraph">
@@ -131,7 +129,7 @@ So the follow up major releases of Nashorn will implement <a href="http://www.ec
 <p>Nashorn comes with a command line client named <code>jjs</code>.</p>
 </div>
 <div class="paragraph">
-<p>This client is located in <code>$JAVA_HOME/bin</code>, but there&#8217;s no shortcut/link/path integration after installation Java 8.
+<p>This client is located in <code>$JAVA_HOME/bin</code>, but there&#8217;s no shortcut/link/path integration after installation of Java 8.
 So, if you want to work with <code>jjs</code> - and that&#8217;s what we want to do here - you should create a link to the tool:</p>
 </div>
 <div class="listingblock">
@@ -177,11 +175,11 @@ print(x + y);</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="js">jjs&gt; exit()
-jjs&gt; exit(<span class="integer">1</span>)
+<pre class="CodeRay highlight"><code data-lang="js">jjs&gt; exit()  <span class="comment">// regular exit</span>
+jjs&gt; exit(<span class="integer">1</span>) <span class="comment">// exit with an exit-code</span>
 
-jjs&gt; quit()
-jjs&gt; quit(<span class="integer">1</span>)</code></pre>
+jjs&gt; quit()  <span class="comment">// regular exit</span>
+jjs&gt; quit(<span class="integer">1</span>) <span class="comment">// exit with an exit-code</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -237,7 +235,7 @@ So, instead of calling your JavaScript file like the traditional way:</p>
 </div>
 </div>
 <div class="paragraph">
-<p>Just write your JavaScript file like the following with a shebang at first line:</p>
+<p>Just write your JavaScript file like the following with a <em>shebang</em> at first line:</p>
 </div>
 <div class="listingblock">
 <div class="title">test.js</div>
@@ -280,18 +278,26 @@ So, for being able to evaluate JavaScript code from Java, we just create a new N
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">ScriptEngine engine = <span class="keyword">new</span> ScriptEngineManager().getEngineByName(<span class="string"><span class="delimiter">&quot;</span><span class="content">nashorn</span><span class="delimiter">&quot;</span></span>);
+<pre class="CodeRay highlight"><code data-lang="java">ScriptEngine engine = <span class="keyword">new</span> ScriptEngineManager().getEngineByName(<span class="string"><span class="delimiter">&quot;</span><span class="content">nashorn</span><span class="delimiter">&quot;</span></span>);<i class="conum" data-value="1"></i><b>(1)</b>
 engine.eval(<span class="string"><span class="delimiter">&quot;</span><span class="content">print('Hello World');</span><span class="delimiter">&quot;</span></span>);</code></pre>
 </div>
 </div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The Nashorn engine names you can use here are <em>"nashorn"</em>, "javascript"_ and <em>"js"</em>.</td>
+</tr>
+</table>
+</div>
 <div class="paragraph">
 <p>As seen above, JavaScript code can be evaluated directly by passing it as a string to the <code>eval()</code> method of the engine object.
-Alternatively you can parse a <code>.js</code>-file by passing a <code>FileReader</code> object pointing to your file:</p>
+Alternatively you can parse (and evaluate) a <code>.js</code>-file by passing a <code>FileReader</code> object pointing to your file:</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="java">ScriptEngine engine = <span class="keyword">new</span> ScriptEngineManager().getEngineByName(<span class="string"><span class="delimiter">&quot;</span><span class="content">nashorn</span><span class="delimiter">&quot;</span></span>);
-engine.eval(<span class="keyword">new</span> <span class="predefined-type">FileReader</span>(<span class="string"><span class="delimiter">'</span><span class="content">test.js</span><span class="delimiter">'</span></span>));</code></pre>
+engine.eval(<span class="keyword">new</span> <span class="predefined-type">FileReader</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">test.js</span><span class="delimiter">&quot;</span></span>));</code></pre>
 </div>
 </div>
 <div class="sect2">
@@ -319,8 +325,9 @@ The <code>Invocable</code> interface provides the <code>invokeFunktion()</code> 
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="java">ScriptEngine engine = <span class="keyword">new</span> ScriptEngineManager().getEngineByName(<span class="string"><span class="delimiter">&quot;</span><span class="content">nashorn</span><span class="delimiter">&quot;</span></span>);
-engine.eval(<span class="keyword">new</span> <span class="predefined-type">FileReader</span>(<span class="string"><span class="delimiter">'</span><span class="content">example.js</span><span class="delimiter">'</span></span>));
+engine.eval(<span class="keyword">new</span> <span class="predefined-type">FileReader</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">example.js</span><span class="delimiter">&quot;</span></span>));
 
+<span class="comment">// cast the script engine to an invocable instance</span>
 Invocable invocable = (Invocable) engine;
 
 <span class="predefined-type">Object</span> result = invocable.invokeFunction(<span class="string"><span class="delimiter">&quot;</span><span class="content">sayHello</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">John Doe</span><span class="delimiter">&quot;</span></span>);
@@ -368,9 +375,11 @@ Since the <code>sayHello()</code> method is static, we don&#8217;t have to creat
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="javascript"><span class="keyword">var</span> MyJavaClass = Java.type(<span class="string"><span class="delimiter">'</span><span class="content">my.package.MyJavaClass</span><span class="delimiter">'</span></span>);
 
+<span class="comment">// call the static method</span>
 <span class="keyword">var</span> greetingResult = MyJavaClass.sayHello(<span class="string"><span class="delimiter">'</span><span class="content">John Doe</span><span class="delimiter">'</span></span>);
 print(greetingResult);
 
+<span class="comment">// create a new intance of MyJavaClass</span>
 <span class="keyword">var</span> myClass = <span class="keyword">new</span> MyJavaClass();
 <span class="keyword">var</span> calcResult = myClass.add(<span class="integer">1</span>, <span class="integer">2</span>);
 print(calcResult);
@@ -396,7 +405,7 @@ print(calcResult);
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="javascript">MyJavaClass.printType(<span class="string"><span class="delimiter">&quot;</span><span class="content">Hello</span><span class="delimiter">&quot;</span></span>);
+<pre class="CodeRay highlight"><code data-lang="javascript">MyJavaClass.printType(<span class="string"><span class="delimiter">'</span><span class="content">Hello</span><span class="delimiter">'</span></span>);
 <span class="comment">// class java.lang.String</span>
 
 MyJavaClass.printType(<span class="integer">123</span>);
@@ -501,7 +510,7 @@ Let&#8217;s assume a JavaScript type <code>Person</code> with some properties an
   <span class="local-variable">this</span>.firstName = firstName;
   <span class="local-variable">this</span>.lastName = lastName;
   <span class="local-variable">this</span>.<span class="function">getFullName</span> = <span class="keyword">function</span>() {
-    <span class="keyword">return</span> <span class="local-variable">this</span>.firstName + <span class="string"><span class="delimiter">&quot;</span><span class="content"> </span><span class="delimiter">&quot;</span></span> + <span class="local-variable">this</span>.lastName;
+    <span class="keyword">return</span> <span class="local-variable">this</span>.firstName + <span class="string"><span class="delimiter">'</span><span class="content"> </span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.lastName;
   }
 }</code></pre>
 </div>
@@ -550,11 +559,11 @@ In this case, you&#8217;ll have to instantiate <code>NashornScriptEngineFactory<
 ScriptEngine engine = factory.getScriptEngine(<span class="keyword">new</span> <span class="predefined-type">String</span><span class="type">[]</span> { <span class="string"><span class="delimiter">&quot;</span><span class="content">-scripting</span><span class="delimiter">&quot;</span></span> });</code></pre>
 </div>
 </div>
-<div class="admonitionblock note">
+<div class="admonitionblock tip">
 <table>
 <tr>
 <td class="icon">
-<i class="fa icon-note" title="Note"></i>
+<i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
 Available options can be determined from the <a href="#_nashorn_at_the_command_line_interface_cli">command line</a> when calling <code>jjs -help</code>.
@@ -642,12 +651,15 @@ More on ScriptContexts and Bindings: <a href="https://wiki.openjdk.java.net/disp
 <div class="sectionbody">
 <div class="paragraph">
 <p>Nashorn comes along with quite a few language and API extensions, additionally to the ECMAScript standard.
-Let&#8217;s have a look at some of the IMHO most useful and interessting ones.</p>
+Most of the API extensions exist due to backward compatibility to Rhino.</p>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s have a look at some of the IMHO most useful and interessting ones.</p>
 </div>
 <div class="sect2">
 <h3 id="_print_function">3.1. Print Function</h3>
 <div class="paragraph">
-<p>Nashorn comes with a handy <code>print</code> function, which prints its arguments (after converting it to a string) to standard out:</p>
+<p>Nashorn comes with a handy <code>print</code> function, which prints its arguments (after converting it to a string) to standard out (<code>stdout</code>):</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -655,9 +667,58 @@ Let&#8217;s have a look at some of the IMHO most useful and interessting ones.</
 <span class="comment">// Hello World</span></code></pre>
 </div>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<code>echo()</code> is an equivalent to the <code>print()</code> function.
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+Nashorn does not have a <code>console</code> object, where browsers do logging!
+</td>
+</tr>
+</table>
+</div>
 </div>
 <div class="sect2">
-<h3 id="_string_interpolation">3.2. String Interpolation</h3>
+<h3 id="_reading_stdin">3.2. Reading Stdin</h3>
+<div class="paragraph">
+<p>If you want to read from the <code>stdin</code>, there&#8217;s the <code>readLine()</code> function:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="javascript">jjs&gt; <span class="keyword">var</span> name = readLine(<span class="string"><span class="delimiter">&quot;</span><span class="content">What is your name? </span><span class="delimiter">&quot;</span></span>)
+What is your name? John
+jjs&gt; print(<span class="string"><span class="delimiter">&quot;</span><span class="content">Hello, ${name}!</span><span class="delimiter">&quot;</span></span>)
+Hello, John!</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_reading_files">3.3. Reading Files</h3>
+<div class="paragraph">
+<p>If <code>stdin</code> is just not enough, you can use <code>readFully()</code> to read complete file contents into a variable:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="javascript"><span class="keyword">var</span> content = readFully(<span class="string"><span class="delimiter">'</span><span class="content">text.txt</span><span class="delimiter">'</span></span>);</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_string_interpolation">3.4. String Interpolation</h3>
 <div class="paragraph">
 <p>You can specify expressions inside string literals with the <code>${expression}</code> syntax.
 The string value is computed by substituting the name of the <code>${expr}</code> expression with the value of the corresponding variable.</p>
@@ -665,14 +726,14 @@ The string value is computed by substituting the name of the <code>${expr}</code
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="javascript"><span class="keyword">var</span> name = <span class="string"><span class="delimiter">&quot;</span><span class="content">World</span><span class="delimiter">&quot;</span></span>;
-<span class="keyword">var</span> str = <span class="string"><span class="delimiter">&quot;</span><span class="content">Hello, %{name}!</span><span class="delimiter">&quot;</span></span>;
+<span class="keyword">var</span> str = <span class="string"><span class="delimiter">&quot;</span><span class="content">Hello, ${name}!</span><span class="delimiter">&quot;</span></span>;
 print(str);
 <span class="comment">// Hello, World!</span></code></pre>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_back_quote_exec_expressions">3.3. Back-quote exec expressions</h3>
+<h3 id="_back_quote_exec_expressions">3.5. Back-quote exec expressions</h3>
 <div class="paragraph">
 <p>Nashorn supports Unix shell like back quote strings.
 Back quoted strings are evaluated by executing the programs mentioned in the string and returning value produced by the 'exec'-ed program.</p>
@@ -687,9 +748,21 @@ Back quoted strings are evaluated by executing the programs mentioned in the str
 }</code></pre>
 </div>
 </div>
+<div class="admonitionblock caution">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-caution" title="Caution"></i>
+</td>
+<td class="content">
+Don&#8217;t mix this up with the new back quote string templates in ES6, they are similar to String interpolation mentioned above!
+</td>
+</tr>
+</table>
+</div>
 </div>
 <div class="sect2">
-<h3 id="_java_beans">3.4. Java Beans</h3>
+<h3 id="_java_beans">3.6. Java Beans</h3>
 <div class="paragraph">
 <p>With Nashorn, you get direct access to the properties of a Java bean, no need to use getters and setters anymore:</p>
 </div>
@@ -697,25 +770,27 @@ Back quoted strings are evaluated by executing the programs mentioned in the str
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="javascript"><span class="keyword">var</span> Date = Java.type(<span class="string"><span class="delimiter">'</span><span class="content">java.util.Date</span><span class="delimiter">'</span></span>);
 <span class="keyword">var</span> date = <span class="keyword">new</span> Date();
-date.year += <span class="integer">1900</span>;
-print(date.year);  <span class="comment">// 2015</span></code></pre>
+date.year += <span class="integer">1900</span>; <span class="comment">// -&gt; no setter!</span>
+print(date.year);  <span class="comment">// -&gt; no getter!</span>
+<span class="comment">// 2016</span></code></pre>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_function_literals">3.5. Function Literals</h3>
+<h3 id="_function_literals">3.7. Function Literals</h3>
 <div class="paragraph">
 <p>For simple, one-line functions, we don&#8217;t necessarily have to use curly braces (and can also ommit the <code>return</code> keyword):</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="javascript"><span class="keyword">function</span> <span class="function">add</span>(a, b) a + b;
+
 print(add(<span class="integer">1</span>, <span class="integer">2</span>);  <span class="comment">// 3</span></code></pre>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_binding_properties">3.6. Binding Properties</h3>
+<h3 id="_binding_properties">3.8. Binding Properties</h3>
 <div class="paragraph">
 <p>You can bind properties from one object to another object:</p>
 </div>
@@ -733,7 +808,7 @@ print(o2.foo);    <span class="comment">// John</span></code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_trimming_strings">3.7. Trimming Strings</h3>
+<h3 id="_trimming_strings">3.9. Trimming Strings</h3>
 <div class="paragraph">
 <p>Additionally to <code>.trim()</code>, you can just trim your string object on the left or the right:</p>
 </div>
@@ -745,7 +820,7 @@ print(<span class="string"><span class="delimiter">&quot;</span><span class="con
 </div>
 </div>
 <div class="sect2">
-<h3 id="_whereis">3.8. Whereis</h3>
+<h3 id="_whereis">3.10. Whereis</h3>
 <div class="paragraph">
 <p>In case you get lost while programming:</p>
 </div>
@@ -756,7 +831,7 @@ print(<span class="string"><span class="delimiter">&quot;</span><span class="con
 </div>
 </div>
 <div class="sect2">
-<h3 id="_import_scopes">3.9. Import Scopes</h3>
+<h3 id="_import_scopes">3.11. Import Scopes</h3>
 <div class="paragraph">
 <p>Sometimes it&#8217;s useful to import many java packages at once.
 We can use the class <code>JavaImporter</code> to be used in conjunction with the <code>with</code> statement.
@@ -773,7 +848,7 @@ All class files from the imported packages are accessible within the local scope
 </div>
 </div>
 <div class="sect2">
-<h3 id="_packages">3.10. Packages</h3>
+<h3 id="_packages">3.12. Packages</h3>
 <div class="paragraph">
 <p>Packages and related objects are there to support java package, class access from script.
 The properties of the <code>Packages</code> variable are all the top-level Java packages, such as <code>java</code>, <code>javax</code> etc.</p>
@@ -789,6 +864,9 @@ The properties of the <code>Packages</code> variable are all the top-level Java 
 <span class="keyword">var</span> JFrame = javax.swing.JFrame;  <span class="comment">// javax == Packages.javax</span>
 <span class="keyword">var</span> List = java.util.List;        <span class="comment">// java == Packages.java</span></code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s test it in <code>jjs</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -806,7 +884,7 @@ jjs&gt; javax.swing.JFrame
 </div>
 </div>
 <div class="sect2">
-<h3 id="_typed_arrays">3.11. Typed Arrays</h3>
+<h3 id="_typed_arrays">3.13. Typed Arrays</h3>
 <div class="paragraph">
 <p>Native JavaScript arrays are untyped.
 Nashorn implements typed arrays as specified at <a href="https://www.khronos.org/registry/typedarray/specs/latest/" class="bare">https://www.khronos.org/registry/typedarray/specs/latest/</a>.</p>
@@ -816,12 +894,12 @@ Nashorn implements typed arrays as specified at <a href="https://www.khronos.org
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="javascript"><span class="keyword">var</span> IntArray = Java.type(<span class="string"><span class="delimiter">&quot;</span><span class="content">int[]</span><span class="delimiter">&quot;</span></span>);
+<pre class="CodeRay highlight"><code data-lang="javascript"><span class="keyword">var</span> IntArray = Java.type(<span class="string"><span class="delimiter">'</span><span class="content">int[]</span><span class="delimiter">'</span></span>);
 
 <span class="keyword">var</span> array = <span class="keyword">new</span> IntArray(<span class="integer">3</span>);
-<span class="keyword">var</span> array[<span class="integer">0</span>] = <span class="integer">3</span>;
-<span class="keyword">var</span> array[<span class="integer">1</span>] = <span class="integer">2</span>;
-<span class="keyword">var</span> array[<span class="integer">2</span>] = <span class="integer">1</span>;
+array[<span class="integer">0</span>] = <span class="integer">3</span>;
+array[<span class="integer">1</span>] = <span class="integer">2</span>;
+array[<span class="integer">2</span>] = <span class="integer">1</span>;
 
 <span class="keyword">try</span> {
     array[<span class="integer">3</span>] = <span class="integer">0</span>;  <span class="comment">// would be possible in pure JS</span>
@@ -829,13 +907,13 @@ Nashorn implements typed arrays as specified at <a href="https://www.khronos.org
     print(e.message);  <span class="comment">// Array index out of range: 3</span>
 }
 
-array[<span class="integer">0</span>] = <span class="string"><span class="delimiter">&quot;</span><span class="content">42</span><span class="delimiter">&quot;</span></span>;
+array[<span class="integer">0</span>] = <span class="string"><span class="delimiter">'</span><span class="content">42</span><span class="delimiter">'</span></span>;
 print(array[<span class="integer">0</span>]);  <span class="comment">// 42</span>
 
-array[<span class="integer">0</span>] = <span class="string"><span class="delimiter">&quot;</span><span class="content">some wrong type</span><span class="delimiter">&quot;</span></span>;
+array[<span class="integer">0</span>] = <span class="string"><span class="delimiter">'</span><span class="content">some wrong type</span><span class="delimiter">'</span></span>;
 print(array[<span class="integer">0</span>]);  <span class="comment">// 0</span>
 
-array[<span class="integer">0</span>] = <span class="string"><span class="delimiter">&quot;</span><span class="content">3.14</span><span class="delimiter">&quot;</span></span>;
+array[<span class="integer">0</span>] = <span class="string"><span class="delimiter">'</span><span class="content">3.14</span><span class="delimiter">'</span></span>;
 print(array[<span class="integer">0</span>]);  <span class="comment">// 3</span></code></pre>
 </div>
 </div>
@@ -846,9 +924,10 @@ Strings will automatically be converted to <code>int</code>, if possible.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_collections_and_for_each">3.12. Collections and For-Each</h3>
+<h3 id="_collections_and_for_each">3.14. Collections and For-Each</h3>
 <div class="paragraph">
-<p>Array handling in JavaScript is sometimes annoying. Let&#8217;s use Java collections instead!</p>
+<p>Array handling in JavaScript is sometimes annoying. Let&#8217;s use Java collections instead!<br>
+<em>(BTW: this has become much better with ES6)</em></p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -880,16 +959,16 @@ map.put(<span class="string"><span class="delimiter">'</span><span class="conten
 </div>
 </div>
 <div class="sect2">
-<h3 id="_convert_arrays">3.13. Convert Arrays</h3>
+<h3 id="_convert_arrays">3.15. Convert Arrays</h3>
 <div class="paragraph">
 <p>Some packages like <code>java.util</code> (and <code>java.lang</code>) can be accessed directly without utilizing <code>Java.type</code> or <code>JavaImporter</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="javascript"><span class="keyword">var</span> list = <span class="keyword">new</span> java.util.ArrayList();
-list.add(<span class="string"><span class="delimiter">&quot;</span><span class="content">John</span><span class="delimiter">&quot;</span></span>);
-list.add(<span class="string"><span class="delimiter">&quot;</span><span class="content">Jack</span><span class="delimiter">&quot;</span></span>);
-list.add(<span class="string"><span class="delimiter">&quot;</span><span class="content">Joe</span><span class="delimiter">&quot;</span></span>);</code></pre>
+list.add(<span class="string"><span class="delimiter">'</span><span class="content">John</span><span class="delimiter">'</span></span>);
+list.add(<span class="string"><span class="delimiter">'</span><span class="content">Jack</span><span class="delimiter">'</span></span>);
+list.add(<span class="string"><span class="delimiter">'</span><span class="content">Joe</span><span class="delimiter">'</span></span>);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -912,34 +991,34 @@ print(Object.prototype.toString.call(jsArray));  <span class="comment">// [objec
 </div>
 </div>
 <div class="sect2">
-<h3 id="_lambdas_and_streams">3.14. Lambdas and Streams</h3>
+<h3 id="_lambdas_and_streams">3.16. Lambdas and Streams</h3>
 <div class="paragraph">
 <p>As Lambdas and Streams are available since Java 8, it&#8217;s also possible to work with them in Nashorn! \o/</p>
 </div>
 <div class="paragraph">
-<p>Although ECMAScript 5.1 lacks the compact arrow syntax from the Java 8 lambda expressions, we can use function literals where ever lambda expressions are accepted.</p>
+<p>Although ECMAScript 5.1 lacks the <em>compact arrow syntax</em> from the Java 8 lambda expressions, we can use function literals where ever lambda expressions are accepted.</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="javascript"><span class="keyword">var</span> list = <span class="keyword">new</span> java.util.ArrayList();
-list.add(<span class="string"><span class="delimiter">&quot;</span><span class="content">a1</span><span class="delimiter">&quot;</span></span>);
-list.add(<span class="string"><span class="delimiter">&quot;</span><span class="content">b1</span><span class="delimiter">&quot;</span></span>);
-list.add(<span class="string"><span class="delimiter">&quot;</span><span class="content">c1</span><span class="delimiter">&quot;</span></span>);
-list.add(<span class="string"><span class="delimiter">&quot;</span><span class="content">a3</span><span class="delimiter">&quot;</span></span>);
-list.add(<span class="string"><span class="delimiter">&quot;</span><span class="content">b3</span><span class="delimiter">&quot;</span></span>);
-list.add(<span class="string"><span class="delimiter">&quot;</span><span class="content">c3</span><span class="delimiter">&quot;</span></span>);
-list.add(<span class="string"><span class="delimiter">&quot;</span><span class="content">a2</span><span class="delimiter">&quot;</span></span>);
-list.add(<span class="string"><span class="delimiter">&quot;</span><span class="content">b2</span><span class="delimiter">&quot;</span></span>);
-list.add(<span class="string"><span class="delimiter">&quot;</span><span class="content">c2</span><span class="delimiter">&quot;</span></span>);
+list.add(<span class="string"><span class="delimiter">'</span><span class="content">a1</span><span class="delimiter">'</span></span>);
+list.add(<span class="string"><span class="delimiter">'</span><span class="content">b1</span><span class="delimiter">'</span></span>);
+list.add(<span class="string"><span class="delimiter">'</span><span class="content">c1</span><span class="delimiter">'</span></span>);
+list.add(<span class="string"><span class="delimiter">'</span><span class="content">a3</span><span class="delimiter">'</span></span>);
+list.add(<span class="string"><span class="delimiter">'</span><span class="content">b3</span><span class="delimiter">'</span></span>);
+list.add(<span class="string"><span class="delimiter">'</span><span class="content">c3</span><span class="delimiter">'</span></span>);
+list.add(<span class="string"><span class="delimiter">'</span><span class="content">a2</span><span class="delimiter">'</span></span>);
+list.add(<span class="string"><span class="delimiter">'</span><span class="content">b2</span><span class="delimiter">'</span></span>);
+list.add(<span class="string"><span class="delimiter">'</span><span class="content">c2</span><span class="delimiter">'</span></span>);
 
 list
     .stream()
-    .filter(<span class="keyword">function</span>(e) {
-        <span class="keyword">return</span> e.startsWith(<span class="string"><span class="delimiter">&quot;</span><span class="content">b</span><span class="delimiter">&quot;</span></span>);
+    .filter(<span class="keyword">function</span>(entry) {
+        <span class="keyword">return</span> entry.startsWith(<span class="string"><span class="delimiter">'</span><span class="content">a</span><span class="delimiter">'</span></span>);
     })
     .sorted()
-    .forEach(<span class="keyword">function</span>(e) {
-        print(e);
+    .forEach(<span class="keyword">function</span>(entry) {
+        print(entry);
     });
 <span class="comment">// a1, a2, a3</span></code></pre>
 </div>
@@ -957,7 +1036,7 @@ Where ever a Java 8 Lambda or SAM (single-abstract-method) type is required, an 
 </table>
 </div>
 <div class="sect3">
-<h4 id="_every_lambda_is_a_script_function">3.14.1. Every Lambda is a Script Function</h4>
+<h4 id="_every_lambda_is_a_javascript_function">3.16.1. Every Lambda is a JavaScript Function</h4>
 <div class="paragraph">
 <p>Any Java object that is an instance of lambda type can be treated like a script function.</p>
 </div>
@@ -978,7 +1057,7 @@ obj(<span class="integer">23</span>);</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_extending_classes">3.15. Extending Classes</h3>
+<h3 id="_extending_classes">3.17. Extending Classes</h3>
 <div class="paragraph">
 <p>Java types can simply be extended with the <code>Java.extend</code> extension.</p>
 </div>
@@ -1016,10 +1095,10 @@ As you can see, even multi-threaded code is possible in Nashorn.
 </div>
 </div>
 <div class="sect2">
-<h3 id="_calling_super">3.16. Calling Super</h3>
+<h3 id="_calling_super">3.18. Calling Super</h3>
 <div class="paragraph">
 <p>Accessing overridden members in JavaScript is traditionally awkward because Javas <code>super</code> keyword doesn&#8217;t exist in ECMAScript.
-Luckily nashorn goes to the rescue.</p>
+Luckily nashorn comes to the rescue.</p>
 </div>
 <div class="paragraph">
 <p>First we define a super type in java code:</p>
@@ -1061,9 +1140,9 @@ runner.run();
 </div>
 </div>
 <div class="sect2">
-<h3 id="_loading_scripts">3.17. Loading Scripts</h3>
+<h3 id="_loading_scripts">3.19. Loading Scripts</h3>
 <div class="paragraph">
-<p>Loading and evaluating additional script files from Nashorn JavaScript is quite easy with the <code>load</code> function.
+<p>Loading and evaluating additional script files from Nashorn is quite easy with the <code>load</code> function.
 We can load local and external files.</p>
 </div>
 <div class="paragraph">
@@ -1082,7 +1161,7 @@ print(now);
 <p>The (external) script will be evaluated in the same context, so we can access the <code>moment</code> function directly.</p>
 </div>
 <div class="sect3">
-<h4 id="_load_in_new_global_context">3.17.1. Load in new Global Context</h4>
+<h4 id="_load_in_new_global_context">3.19.1. Load in new Global Context</h4>
 <div class="paragraph">
 <p>Loading external files can break your own code, when it is using same variable names as your code!
 To avoid this, files can be loaded into a new global scope:</p>
@@ -1098,7 +1177,7 @@ To avoid this, files can be loaded into a new global scope:</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_error_object">3.18. Error Object</h3>
+<h3 id="_error_object">3.20. Error Object</h3>
 <div class="paragraph">
 <p>Nashorn extends the ECMAScript standard <code>Error</code> object by a few more interesting informations.</p>
 </div>
@@ -1113,20 +1192,21 @@ To avoid this, files can be loaded into a new global scope:</p>
 }
 
 <span class="keyword">try</span> {
-    f()
+    f();
 } <span class="keyword">catch</span> (e) {
     print(e.stack);
     print(e.lineNumber);
     print(e.columnNumber);
     print(e.fileName);
 
+    <span class="comment">// of course, also this is possible</span>
     e.printStackTrace();
 }</code></pre>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_scripting_mode_extension_objects">3.19. Scripting Mode Extension Objects</h3>
+<h3 id="_scripting_mode_extension_objects">3.21. Scripting Mode Extension Objects</h3>
 <div class="paragraph">
 <p>There are some global object defined in Nashorn, when <code>-scripting</code> mode is enabled.</p>
 </div>
@@ -1134,7 +1214,7 @@ To avoid this, files can be loaded into a new global scope:</p>
 <p>Most of them are self-explaining, so I provided just some source code examples:</p>
 </div>
 <div class="sect3">
-<h4 id="__arg">3.19.1. $ARG</h4>
+<h4 id="__arg">3.21.1. $ARG</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="bash">$ jjs -scripting -- arg1 arg2 arg3
@@ -1144,9 +1224,21 @@ jjs&gt; $ARG[1]
 arg2</code></pre>
 </div>
 </div>
+<div class="sect4">
+<h5 id="_arguments">arguments</h5>
+<div class="listingblock">
+<div class="content">
+<pre>$ jjs -scripting -- arg1 arg2 arg3
+jjs&gt; arguments
+arg1,arg2,arg3
+jjs&gt; arguments[1]
+arg2</pre>
+</div>
+</div>
+</div>
 </div>
 <div class="sect3">
-<h4 id="__env">3.19.2. $ENV</h4>
+<h4 id="__env">3.21.2. $ENV</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="javascript"><span class="comment">// print $JAVA_HOME and $PATH from the OS shell</span>
@@ -1158,7 +1250,7 @@ print(<span class="predefined">$ENV</span>.PATH)</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="__exec">3.19.3. $EXEC</h4>
+<h4 id="__exec">3.21.3. $EXEC</h4>
 <div class="paragraph">
 <p>Launch processes to run commands.</p>
 </div>
@@ -1175,7 +1267,7 @@ Send this to stdout</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="__out">3.19.4. $OUT</h4>
+<h4 id="__out">3.21.4. $OUT</h4>
 <div class="paragraph">
 <p>Store the latest standard output (stdout) of the process spawned by <code>$EXEC</code>.</p>
 </div>
@@ -1191,19 +1283,19 @@ print(weather.main.temp);</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="__err">3.19.5. $ERR</h4>
+<h4 id="__err">3.21.5. $ERR</h4>
 <div class="paragraph">
 <p>Store the latest standard error (stderr) of the process spawned by <code>$EXEC</code>.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="__exit">3.19.6. $EXIT</h4>
+<h4 id="__exit">3.21.6. $EXIT</h4>
 <div class="paragraph">
 <p>Store the exit code of the process spawned by <code>$EXEC</code>.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="__options">3.19.7. $OPTIONS</h4>
+<h4 id="__options">3.21.7. $OPTIONS</h4>
 <div class="paragraph">
 <p>This property exposes command line options, which are passed (explit or implicitly) to Nashorn "command line".</p>
 </div>
@@ -1266,7 +1358,7 @@ as there is Java, JavaScript and the perfect symbiosis of both.</p>
 <h4 id="_jvm_npm">4.1.1. JVM-NPM</h4>
 <div class="paragraph">
 <p>Most/many packages rely on <a href="http://www.commonjs.org/">CommonJS</a> with the <code>require()</code> syntax (kind like an <code>import</code> in Java).
-As Nashorn is just a JavaScript engine, it doesn&#8217;t have support for a package manager and/or a dependency loading mechanism.</p>
+As Nashorn is just a JavaScript engine, it unfortunately doesn&#8217;t have support for a package manager and/or a dependency loading mechanism.</p>
 </div>
 <div class="paragraph">
 <p>Luckily there is a project called <a href="https://github.com/nodyn/jvm-npm">npm-jvm</a> (a <em>NPM compliant CommonJS module loader for the JVM</em>),
@@ -1295,7 +1387,7 @@ nashorn&gt; var x = require('some_module');</code></pre>
 <div class="paragraph">
 <p>Many libraries registered in NPM, make use of the Node.js and/or the common browser APIs.
 As Nashorn isn&#8217;t Node.js nor a browser, we have to add some glue to make it work.
-This glue is called <em>polyfill</em>, to provide functions to a environment, where these functions aren&#8217;t available by default.</p>
+This glue is called <em>polyfill</em>, to provide functions to an environment, where these functions aren&#8217;t available by default.</p>
 </div>
 <div class="paragraph">
 <p>For most use cases, this <code>nashorn-polyfill.js</code> polyfill should work:</p>
@@ -1340,9 +1432,18 @@ console.error = print;</code></pre>
 <div class="paragraph">
 <p>Nashorn doesn&#8217;t have access to native language (C/C++) APIs. NPM packages using native APIs can&#8217;t be used in Nashorn.</p>
 </div>
-<div class="paragraph">
-<p>There are discussions out in the wild, if it is possible to use Jython to run Python-based NPM packages inside the JVM,
-but I don’t know of any approach/project testing this.</p>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+There are discussions out in the wild, if it is possible to use <a href="http://www.jython.org">Jython</a> to run Python-based NPM packages inside the JVM,
+but I don’t know of any approach/project testing this.
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
@@ -1385,7 +1486,7 @@ With WebJars, you can use NPM packages just as regular Maven dependencies in you
 </div>
 <div class="paragraph">
 <p>If there is no WebJar of your favourite NPM package available, it&#8217;s easy to create one.
-There&#8217;s a <a href="http://www.webjars.org/contributing">detailed documentation on the website</a>, how to do it.</p>
+There&#8217;s a <a href="http://www.webjars.org/contributing">detailed documentation on the website</a>, on how to do it.</p>
 </div>
 </div>
 <div class="sect3">
@@ -1401,6 +1502,17 @@ There&#8217;s a <a href="http://www.webjars.org/contributing">detailed documenta
 </blockquote>
 <div class="attribution">
 &#8212; <a href="https://twitter.com/lukaseder">Lukas Eder</a>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ nasven package.json
+nashorn full version 1.8.0_72-b15
+[NASVEN] Building temporary Apache Maven project to find dependencies ...
+[NASVEN] Done!
+[NASVEN] About to run your nasven.js application under /Users/Niko/nasven/nasven-samples/camel/index.js ...
+
+[NASVEN] Calling jjs for your application ...</code></pre>
 </div>
 </div>
 <div class="sect4">
@@ -1439,7 +1551,8 @@ Nearly everything what I wrote about Maven ist somehow available in similar ways
 <div class="sect2">
 <h3 id="_what_does_em_isomorphic_em_mean_what_can_i_do_with_it_and_why_should_i_use_it">5.1. What does <em>Isomorphic</em> mean, what can I do with it and why should I use it?</h3>
 <div class="paragraph">
-<p>Isomorphic comes from the Greek <em>"isos"</em> for <em>"equal"</em> and <em>"morph"</em> for <em>"shape"</em>.</p>
+<p>Isomorphic comes from the Greek <em>"isos"</em> for <em>"equal"</em> and <em>"morph"</em> for <em>"shape"</em>.
+So, it&#8217;s about the <em>same</em> or <em>equal shape</em> of something.</p>
 </div>
 <div class="quoteblock">
 <blockquote>
@@ -1505,7 +1618,7 @@ And last, but not least, isomorphic code leads you and your developers to be abl
 </div>
 <div class="paragraph">
 <p>This works pretty well, but to prevent that users disable JavaScript in the browser and pass an invalid password to the server,
-you&#8217;ll have to develp the same logic again the programming language used on the server, perhaps Java.
+you&#8217;ll have to develop the same logic again in the programming language used on the server, perhaps Java.
 This is additional effort, can lead to implementation errors, something may be forgotten in implementation, latest on maintenance.
 <em>Why not re-use the above logic in your Java code?</em></p>
 </div>
@@ -1541,7 +1654,7 @@ which render the whole application UI and is responsible for all transitions, pa
 </div>
 </div>
 <div class="paragraph">
-<p>These applications are (mostyl) awesome, but have some drawbacks:</p>
+<p>These applications are (mostly) awesome, but have some drawbacks:</p>
 </div>
 <div class="sect4">
 <h5 id="_cons">Cons</h5>
@@ -1558,7 +1671,7 @@ which render the whole application UI and is responsible for all transitions, pa
 <p>Users will possibly go away (3sec. rule!).</p>
 </li>
 <li>
-<p>Think of slow internet connections!</p>
+<p>Think of slow internet connections!?</p>
 </li>
 </ol>
 </div>
@@ -1571,7 +1684,7 @@ which render the whole application UI and is responsible for all transitions, pa
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
-<p>Even if Google can now evaluate JavaScript on websites, it&#8217;s still error-prone and a mess!</p>
+<p>Even if Google can now evaluate JavaScript on websites, it&#8217;s still error-prone, a mess and you can&#8217;t rely on proper evaluation!</p>
 </li>
 </ol>
 </div>
@@ -1579,7 +1692,7 @@ which render the whole application UI and is responsible for all transitions, pa
 </ol>
 </div>
 <div class="paragraph">
-<p>So, perhaps it&#8217;s better to render the web pages on the server?</p>
+<p>So, perhaps it&#8217;s better to render the web pages <em>on the server!?</em></p>
 </div>
 </div>
 <div class="sect4">
@@ -1590,7 +1703,7 @@ which render the whole application UI and is responsible for all transitions, pa
 <div class="ulist">
 <ul>
 <li>
-<p><strong>UX</strong> - cool transition effects</p>
+<p><strong>UX</strong> - cool transition effects <em>(which are required nowadays to be able to compete on the market!)</em></p>
 </li>
 <li>
 <p><strong>Performance</strong> - faster rendering of only parts/fragments of the entire page</p>
@@ -1601,7 +1714,7 @@ which render the whole application UI and is responsible for all transitions, pa
 </ul>
 </div>
 <div class="paragraph">
-<p>These advantages can only be achieved by running the application and rendering the pages on the client!</p>
+<p>These advantages can only be achieved by running the application and rendering the pages <em>on the client!</em></p>
 </div>
 </div>
 <div class="sect4">
@@ -1638,7 +1751,7 @@ which render the whole application UI and is responsible for all transitions, pa
 <p>So, everytime a user makes an intial request to the app or an app path, the server should render the page and sends it to the client.
 From that moment on, the client can takeover control and proceed with rendering the content.
 This bridges the gap to initialize the client while the user can consume the intial server-side rendered page.
-Additionally, search engines get valid html with already rendered content if the want to index your site.
+Additionally, search engines get valid html with already rendered content if they want to index your site.
 And legacy browsers are also able to consume your site, if not only the client is able to render your pages.</p>
 </div>
 </div>
@@ -1661,8 +1774,8 @@ Additionally, React supports server-side rendering of templates.</p>
 <p>For building full-stack apps with React, there&#8217;s an architecture approach, called <a href="https://facebook.github.io/flux" target="_blank">Flux</a>.
 This architecture is a straight-forward approach and relies on immutable entities and collections.
 The state of the application is stored in a so called <code>Store</code>, the store represents the data for rendering the templates.
-The store may only be modified by a <code>Dispatcher</code>, which will get events (with data) from an <code>Actions</code>.
-Actions are the ones, who may communicate with the outside-world (e.g. service calls).</p>
+The store may only be modified by a <code>Dispatcher</code>, which will get events (with data) from an <code>Action</code>.
+Actions are the (only) ones, who may/should communicate with the outside-world (e.g. service calls).</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -1671,7 +1784,7 @@ Actions are the ones, who may communicate with the outside-world (e.g. service c
 <div class="title">The Flux Architecture Principle</div>
 </div>
 <div class="paragraph">
-<p>The currently most popular Flux implementation library is called <a href="http://redux.js.org/" target="_blank">Redux</a>.</p>
+<p>The currently most popular Flux implementation library is called <a href="http://redux.js.org/" target="_blank">Redux</a>, but there are a lot of others, too.</p>
 </div>
 </div>
 <div class="sect3">
@@ -1696,6 +1809,9 @@ Actions are the ones, who may communicate with the outside-world (e.g. service c
 </div>
 </div>
 <div class="paragraph">
+<p><em>(Some people might be remembered on JSP when reading the code above&#8230;&#8203;)</em></p>
+</div>
+<div class="paragraph">
 <p>JSX will be transpiled (transformed) to executable JavaScript (ES5) by using <a href="https://babeljs.io" target="_blank">Babel.js</a>.
 (Formerlly this was done by <code>JSXTransformer</code>, a library from Facebook, but they switched to Babel, b/c it&#8217;s more powerful.)</p>
 </div>
@@ -1715,7 +1831,7 @@ Actions are the ones, who may communicate with the outside-world (e.g. service c
 </div>
 </div>
 <div class="paragraph">
-<p>At runtime, this JavaScript code will be rendered as proper HTML.</p>
+<p>At runtime, this JavaScript code will be rendered to proper HTML.</p>
 </div>
 <div class="listingblock">
 <div class="title">app.html</div>
@@ -1790,7 +1906,7 @@ I wrote a <code>ViewEngine</code> based on React.js, and also a working example,
 </ul>
 </div>
 <div class="paragraph">
-<p>The following, simplified code fragments are taken from the two above mentioned repositories to show, how an isomorphic JavaScript/Java EE application is realized.</p>
+<p>The following, simplified(!) code fragments are taken from the two above mentioned repositories to show, how an isomorphic JavaScript/Java EE application is realized.</p>
 </div>
 <div class="admonitionblock caution">
 <table>
@@ -1993,7 +2109,7 @@ Ensure to use the original code from the above mentioned respository when buildi
 <span class="keyword">var</span> <span class="function">renderClient</span> = <span class="keyword">function</span> (books) {<i class="conum" data-value="2"></i><b>(2)</b>
     <span class="keyword">var</span> data = books || [];
     React.render(
-        <span class="tag">&lt;BookBox</span> <span class="attribute-name">data</span>=<span class="error">{</span><span class="attribute-value">data</span><span class="error">}</span> <span class="attribute-name">url</span>=<span class="string"><span class="delimiter">'</span><span class="content">books.json</span><span class="delimiter">'</span></span> <span class="attribute-name">pollInterval</span>=<span class="error">{</span><span class="attribute-value">5000</span><span class="error">}</span> <span class="tag">/&gt;</span>,
+        <span class="tag">&lt;BookBox</span> <span class="attribute-name">data</span>=<span class="error">{</span><span class="attribute-value">data</span><span class="error">}</span> <span class="attribute-name">url</span>=<span class="string"><span class="delimiter">'</span><span class="content">books.json</span><span class="delimiter">'</span></span> <span class="attribute-name">pollInterval</span>=<span class="error">{</span><span class="attribute-value">5000</span><span class="error">}</span> <span class="tag">/&gt;</span>,<i class="conum" data-value="4"></i><b>(4)</b>
         document.getElementById(<span class="string"><span class="delimiter">&quot;</span><span class="content">content</span><span class="delimiter">&quot;</span></span>)
     );
 };
@@ -2001,7 +2117,7 @@ Ensure to use the original code from the above mentioned respository when buildi
 <span class="keyword">var</span> <span class="function">renderServer</span> = <span class="keyword">function</span> (books) {<i class="conum" data-value="3"></i><b>(3)</b>
     <span class="keyword">var</span> data = Java.from(books);
     <span class="keyword">return</span> React.renderToString(
-        <span class="tag">&lt;BookBox</span> <span class="attribute-name">data</span>=<span class="error">{</span><span class="attribute-value">data</span><span class="error">}</span> <span class="attribute-name">url</span>=<span class="string"><span class="delimiter">'</span><span class="content">books.json</span><span class="delimiter">'</span></span> <span class="attribute-name">pollInterval</span>=<span class="error">{</span><span class="attribute-value">5000</span><span class="error">}</span> <span class="tag">/&gt;</span>
+        <span class="tag">&lt;BookBox</span> <span class="attribute-name">data</span>=<span class="error">{</span><span class="attribute-value">data</span><span class="error">}</span> <span class="attribute-name">url</span>=<span class="string"><span class="delimiter">'</span><span class="content">books.json</span><span class="delimiter">'</span></span> <span class="attribute-name">pollInterval</span>=<span class="error">{</span><span class="attribute-value">5000</span><span class="error">}</span> <span class="tag">/&gt;</span><i class="conum" data-value="4"></i><b>(4)</b>
     );
 };</code></pre>
 </div>
@@ -2010,7 +2126,7 @@ Ensure to use the original code from the above mentioned respository when buildi
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>there&#8217;s of course more code before, but that isn&#8217;t interesting for us at this point</td>
+<td>there&#8217;s of course more code before, but that&#8217;s not interesting for us at this point</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
@@ -2020,10 +2136,14 @@ Ensure to use the original code from the above mentioned respository when buildi
 <td><i class="conum" data-value="3"></i><b>3</b></td>
 <td>this function will be called by the server (see above) to render the content</td>
 </tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>the <code>&lt;BookBox/&gt;</code> component is the code from &lt;1&gt;, which is ommitted here, but the actual isomorphic code!</td>
+</tr>
 </table>
 </div>
 <div class="paragraph">
-<p>The HTML skeleton, which will be enriched by the server-side rendered code and send to the client.</p>
+<p>The HTML skeleton, which will be enriched by the server-side rendered code, and send to the client.</p>
 </div>
 <div class="listingblock">
 <div class="title">react.jsp</div>
@@ -2036,18 +2156,18 @@ Ensure to use the original code from the above mentioned respository when buildi
     <span class="tag">&lt;meta</span> <span class="attribute-name">http-equiv</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">X-UA-Compatible</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">content</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">IE=edge</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
     <span class="tag">&lt;meta</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">viewport</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">content</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">width=device-width, initial-scale=1</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
     <span class="tag">&lt;title&gt;</span>ReactJS Bookstore with Ozark<span class="tag">&lt;/title&gt;</span>
-    <span class="tag">&lt;script</span> <span class="attribute-name">src</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">${mvc.contextPath}/webjars/react/0.14.2/react.min.js</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span><span class="tag">&lt;/script&gt;</span>
+    <span class="tag">&lt;script</span> <span class="attribute-name">src</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">${mvc.contextPath}/webjars/react/0.14.2/react.min.js</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span><span class="tag">&lt;/script&gt;</span><i class="conum" data-value="1"></i><b>(1)</b>
     <span class="tag">&lt;script</span> <span class="attribute-name">src</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">${mvc.contextPath}/webjars/showdown/0.3.1/compressed/showdown.js</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span><span class="tag">&lt;/script&gt;</span>
     <span class="tag">&lt;script</span> <span class="attribute-name">src</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">${mvc.contextPath}/webjars/jquery/1.11.3/jquery.min.js</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span><span class="tag">&lt;/script&gt;</span>
     <span class="tag">&lt;link</span> <span class="attribute-name">href</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">${mvc.contextPath}/webjars/bootstrap/3.3.5/css/bootstrap.css</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">rel</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">stylesheet</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
 <span class="tag">&lt;/head&gt;</span>
 
 <span class="tag">&lt;body&gt;</span>
-    <span class="tag">&lt;div</span> <span class="attribute-name">id</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">content</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">class</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">container</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>${content}<span class="tag">&lt;/div&gt;</span><i class="conum" data-value="1"></i><b>(1)</b>
-    <span class="tag">&lt;script</span> <span class="attribute-name">type</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">text/javascript</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">src</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">${mvc.contextPath}/js/bookBox.js</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span><span class="tag">&lt;/script&gt;</span><i class="conum" data-value="2"></i><b>(2)</b>
+    <span class="tag">&lt;div</span> <span class="attribute-name">id</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">content</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">class</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">container</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>${content}<span class="tag">&lt;/div&gt;</span><i class="conum" data-value="2"></i><b>(2)</b>
+    <span class="tag">&lt;script</span> <span class="attribute-name">type</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">text/javascript</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">src</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">${mvc.contextPath}/js/bookBox.js</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span><span class="tag">&lt;/script&gt;</span><i class="conum" data-value="3"></i><b>(3)</b>
     <span class="tag">&lt;script</span> <span class="attribute-name">type</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">text/javascript</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
 <span class="inline">        <span class="predefined">$</span>(<span class="keyword">function</span> () {
-            renderClient(<span class="predefined">$</span>{data});<i class="conum" data-value="3"></i><b>(3)</b>
+            renderClient(<span class="predefined">$</span>{data});<i class="conum" data-value="4"></i><b>(4)</b>
         });</span>
     <span class="tag">&lt;/script&gt;</span>
 <span class="tag">&lt;/body&gt;</span>
@@ -2058,25 +2178,32 @@ Ensure to use the original code from the above mentioned respository when buildi
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>the <code>div</code> in which the rendered content will be put, regardless if client or server</td>
+<td>JS libraries referenced as WebJars (dependency specified in Maven/Gradle build file)</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>the actual application script (see above)</td>
+<td>the <code>div</code> in which the rendered content will be put, regardless if client or server</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>the actual application script (see above)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
 <td>the function which will be called, when the application is executed/initialized on the client-side (the function resides also in <code>bookBox.js</code></td>
 </tr>
 </table>
 </div>
 <div class="paragraph">
-<p>If the application is started, without calling the <code>ReactViewEngine</code> in <code>ReactController</code> (e.g. by returning only <code>"react.jsp"</code>, this yields in using the standard JSP ViewEngine),
+<p>If the application is started without calling the <code>ReactViewEngine</code> in <code>ReactController</code> (e.g. by returning only <code>"react.jsp"</code>, this yields in using the standard JSP ViewEngine),
 there will be no HTML code visible in the <code>&lt;div id="content"/&gt;</code> element if you look at the intial source code received from the server.
 But the content will nevertheless be rendered and displayed in the browser, because of the client-side function call to <code>renderClient()</code>.</p>
 </div>
 <div class="paragraph">
 <p>As soon the application uses the <code>ReactViewEngine</code>, you will see the rendered content also in the <code>&lt;div id="content"/&gt;</code> element, received as source code from the server.</p>
+</div>
+<div class="paragraph">
+<p>The client-side execution of <code>renderClient()</code> is also performed, but as there is no change to the (virtual) DOM, the page stays as it is, there&#8217;s no re-rendering of DOM elements (and thus no flickering).</p>
 </div>
 <div class="admonitionblock tip">
 <table>
@@ -2086,20 +2213,15 @@ But the content will nevertheless be rendered and displayed in the browser, beca
 </td>
 <td class="content">
 Use two different browsers and play with the application. Have a look at the application upating itself every 5 seconds and how the source code relates to these updates (or not).
+== JavaFX with JavaScript
 </td>
 </tr>
 </table>
 </div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_javafx_with_javascript">6. JavaFX with JavaScript</h2>
-<div class="sectionbody">
 <div class="paragraph">
 <p>Nashorn comes with a special support for JavaFX.
 This support can be activated by using the <code>-fx</code> flag on the command-line when using <code>jjs</code>.
-Thus, no additional compile step for the scripted JavaFX and not additonal bootstrapping is needed!</p>
+Thus, no additional compile step for the scripted JavaFX and no additonal bootstrapping is needed!</p>
 </div>
 <div class="paragraph">
 <p>The <code>-fx</code> flag on <code>jjs</code> will bootstrap scripts using a <code>javafx.application.Application</code>.</p>
@@ -2143,7 +2265,7 @@ Thus, no additional compile step for the scripted JavaFX and not additonal boots
 </div>
 </div>
 <div class="paragraph">
-<p>This is how it looks like in JavaScript:</p>
+<p>This is how it looks like in Nashorn JavaScript:</p>
 </div>
 <div class="listingblock">
 <div class="title">fxscript.js</div>
@@ -2232,8 +2354,9 @@ But it can be convenient for prototyping and during development, to have all the
 </tr>
 </table>
 </div>
-<div class="sect3">
-<h4 id="_complete_list_of_includes">6.1. Complete list of includes</h4>
+</div>
+<div class="sect2">
+<h3 id="_list_of_includes">5.5. List of includes</h3>
 <table class="tableblock frame-all grid-all spread">
 <caption class="title">Table 1. FX Includes</caption>
 <colgroup>
@@ -2311,15 +2434,15 @@ Official Oracle documentation including some more examples: <a href="https://doc
 </div>
 </div>
 <div class="sect1">
-<h2 id="_testing_and_debugging_of_nashorn_scripts">7. Testing and Debugging of Nashorn Scripts</h2>
+<h2 id="_testing_and_debugging_of_nashorn_scripts">6. Testing and Debugging of Nashorn Scripts</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_testing">7.1. Testing</h3>
+<h3 id="_testing">6.1. Testing</h3>
 <div class="paragraph">
-<p>Testing of Nashorn scripts is not that hard as it may look like if you&#8217;re not used to it.</p>
+<p>Testing of Nashorn scripts is not that hard as it may look like when you&#8217;re not yet used to it.</p>
 </div>
 <div class="sect3">
-<h4 id="_function_al_testing_with_junit">7.1.1. Function(al) testing with JUnit</h4>
+<h4 id="_function_al_testing_with_junit">6.1.1. Function(al) testing with JUnit</h4>
 <div class="paragraph">
 <p>Because every JavaScript function has a return value (yes, every JavaScript function, even functions which have no explicit return value will return <code>undefined</code>), these values can be asserted.
 Just built up your JavaScript file properly and working with testable, independend, hopefully atomic, functions, just as you would develop your Java methods.
@@ -2329,7 +2452,7 @@ Then, you can just call a JS function in your test and assert the result.</p>
 <p>Let&#8217;s assume we have the following JavaScript code:</p>
 </div>
 <div class="listingblock">
-<div class="title">calc.js</div>
+<div class="title">calculator.js</div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="javascript"><span class="keyword">var</span> <span class="function">add</span> = <span class="keyword">function</span>(a, b) {
     <span class="keyword">return</span> a + b;
@@ -2354,7 +2477,7 @@ Then, you can just call a JS function in your test and assert the result.</p>
     <span class="directive">public</span> <span class="type">void</span> setup() {
         nashorn = <span class="keyword">new</span> ScriptEngineManager().getEngineByName(<span class="string"><span class="delimiter">&quot;</span><span class="content">nashorn</span><span class="delimiter">&quot;</span></span>);
         nashorn.eval(<span class="keyword">new</span> <span class="predefined-type">InputStreamReader</span>(
-                getClass().getClassLoader().getResourceAsStream(<span class="string"><span class="delimiter">&quot;</span><span class="content">/calc.js</span><span class="delimiter">&quot;</span></span>)));
+                getClass().getClassLoader().getResourceAsStream(<span class="string"><span class="delimiter">&quot;</span><span class="content">/calculator.js</span><span class="delimiter">&quot;</span></span>)));
     }
 
     <span class="annotation">@Test</span>
@@ -2373,7 +2496,7 @@ Then, you can just call a JS function in your test and assert the result.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_mocking_javascript_functions_using_spock">7.1.2. Mocking JavaScript functions &amp; using Spock</h4>
+<h4 id="_mocking_javascript_functions_using_spock">6.1.2. Mocking JavaScript functions &amp; using Spock</h4>
 <div class="paragraph">
 <p>A much more nicer (and also more powerful) way of testing Nashorn scripts is to use <a href="https://code.google.com/p/spock">Spock</a> instead of JUnit.
 Spock is based on Groovy code and since Groovy is also a dynamic language, it&#8217;s easier to handle objects and functions created with Groovy between Nashorn and your tests (or <em>specs</em>, as tests are called in Spock).</p>
@@ -2460,7 +2583,7 @@ Further examples with Spock and Nashorn can be found in the GitHub repository <a
 </div>
 </div>
 <div class="sect2">
-<h3 id="_debugging">7.2. Debugging</h3>
+<h3 id="_debugging">6.2. Debugging</h3>
 <div class="paragraph">
 <p>Debugging of Nashorn JavaScript is supported by major IDEs like</p>
 </div>
@@ -2513,7 +2636,7 @@ Further examples with Spock and Nashorn can be found in the GitHub repository <a
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-02-28 11:58:21 UTC
+Last updated 2016-03-03 21:13:02 UTC
 </div>
 </div>
 </body>
