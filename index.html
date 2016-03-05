@@ -75,15 +75,20 @@
 <li><a href="#_react_js">5.2. React.js</a></li>
 <li><a href="#_spring_boot_mvc_for_isomorphic_apps">5.3. Spring Boot MVC for Isomorphic Apps</a></li>
 <li><a href="#_java_ee_8_mvc_1_0_for_isomorphic_apps">5.4. Java EE 8 MVC 1.0 for Isomorphic Apps</a></li>
-<li><a href="#_list_of_includes">5.5. List of includes</a></li>
 </ul>
 </li>
-<li><a href="#_testing_and_debugging_of_nashorn_scripts">6. Testing and Debugging of Nashorn Scripts</a>
+<li><a href="#_javafx_with_javascript">6. JavaFX with JavaScript</a>
 <ul class="sectlevel2">
-<li><a href="#_testing">6.1. Testing</a></li>
-<li><a href="#_debugging">6.2. Debugging</a></li>
+<li><a href="#_list_of_includes">6.1. List of includes</a></li>
 </ul>
 </li>
+<li><a href="#_testing_and_debugging_of_nashorn_scripts">7. Testing and Debugging of Nashorn Scripts</a>
+<ul class="sectlevel2">
+<li><a href="#_testing">7.1. Testing</a></li>
+<li><a href="#_debugging">7.2. Debugging</a></li>
+</ul>
+</li>
+<li><a href="#_contact">8. Contact</a></li>
 </ul>
 </div>
 </div>
@@ -2213,11 +2218,16 @@ But the content will nevertheless be rendered and displayed in the browser, beca
 </td>
 <td class="content">
 Use two different browsers and play with the application. Have a look at the application upating itself every 5 seconds and how the source code relates to these updates (or not).
-== JavaFX with JavaScript
 </td>
 </tr>
 </table>
 </div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_javafx_with_javascript">6. JavaFX with JavaScript</h2>
+<div class="sectionbody">
 <div class="paragraph">
 <p>Nashorn comes with a special support for JavaFX.
 This support can be activated by using the <code>-fx</code> flag on the command-line when using <code>jjs</code>.
@@ -2354,9 +2364,8 @@ But it can be convenient for prototyping and during development, to have all the
 </tr>
 </table>
 </div>
-</div>
 <div class="sect2">
-<h3 id="_list_of_includes">5.5. List of includes</h3>
+<h3 id="_list_of_includes">6.1. List of includes</h3>
 <table class="tableblock frame-all grid-all spread">
 <caption class="title">Table 1. FX Includes</caption>
 <colgroup>
@@ -2434,15 +2443,15 @@ Official Oracle documentation including some more examples: <a href="https://doc
 </div>
 </div>
 <div class="sect1">
-<h2 id="_testing_and_debugging_of_nashorn_scripts">6. Testing and Debugging of Nashorn Scripts</h2>
+<h2 id="_testing_and_debugging_of_nashorn_scripts">7. Testing and Debugging of Nashorn Scripts</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_testing">6.1. Testing</h3>
+<h3 id="_testing">7.1. Testing</h3>
 <div class="paragraph">
 <p>Testing of Nashorn scripts is not that hard as it may look like when you&#8217;re not yet used to it.</p>
 </div>
 <div class="sect3">
-<h4 id="_function_al_testing_with_junit">6.1.1. Function(al) testing with JUnit</h4>
+<h4 id="_function_al_testing_with_junit">7.1.1. Function(al) testing with JUnit</h4>
 <div class="paragraph">
 <p>Because every JavaScript function has a return value (yes, every JavaScript function, even functions which have no explicit return value will return <code>undefined</code>), these values can be asserted.
 Just built up your JavaScript file properly and working with testable, independend, hopefully atomic, functions, just as you would develop your Java methods.
@@ -2496,7 +2505,7 @@ Then, you can just call a JS function in your test and assert the result.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_mocking_javascript_functions_using_spock">6.1.2. Mocking JavaScript functions &amp; using Spock</h4>
+<h4 id="_mocking_javascript_functions_using_spock">7.1.2. Mocking JavaScript functions &amp; using Spock</h4>
 <div class="paragraph">
 <p>A much more nicer (and also more powerful) way of testing Nashorn scripts is to use <a href="https://code.google.com/p/spock">Spock</a> instead of JUnit.
 Spock is based on Groovy code and since Groovy is also a dynamic language, it&#8217;s easier to handle objects and functions created with Groovy between Nashorn and your tests (or <em>specs</em>, as tests are called in Spock).</p>
@@ -2583,7 +2592,7 @@ Further examples with Spock and Nashorn can be found in the GitHub repository <a
 </div>
 </div>
 <div class="sect2">
-<h3 id="_debugging">6.2. Debugging</h3>
+<h3 id="_debugging">7.2. Debugging</h3>
 <div class="paragraph">
 <p>Debugging of Nashorn JavaScript is supported by major IDEs like</p>
 </div>
@@ -2633,10 +2642,27 @@ Further examples with Spock and Nashorn can be found in the GitHub repository <a
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_contact">8. Contact</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Niko Köbler IT-Beratung</p>
+</div>
+<div class="paragraph">
+<p>E-Mail: <a href="mailto:info@n-k.de">info@n-k.de</a></p>
+</div>
+<div class="paragraph">
+<p>Web: <a href="http://www.n-k.de" class="bare">http://www.n-k.de</a></p>
+</div>
+<div class="paragraph">
+<p>Twitter: <a href="https://twitter.com/dasniko">@dasniko</a></p>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-03-03 21:18:12 UTC
+Last updated 2016-03-05 12:52:15 UTC
 </div>
 </div>
 </body>
